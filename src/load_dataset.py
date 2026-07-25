@@ -25,5 +25,11 @@ print (train_Df.dtypes)
 print ("\n text length :  ")
 #train_Df["text_length"] = train_Df["text"].str.len()
 print (train_Df["text_length"].describe()) 
+print("Encoding Check")
+try:
+    train_Df["text"].str.encode("utf-8")
+    print("No encoding issues found.")
+except Exception as e:
+    print(e)
 train_Df.to_csv("data/cleaned/clean_ag_news.csv" , index = False )
 #print (pd.read_csv("data/cleaned/clean_ag_news.csv"))
