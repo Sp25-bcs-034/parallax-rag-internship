@@ -34,13 +34,14 @@ except Exception as e:
 train_Df.to_csv("data/cleaned/clean_ag_news.csv" , index = False )
 #print (pd.read_csv("data/cleaned/clean_ag_news.csv"))
 # chunking 
+print ("\n ---- CHUNKING  -----")
 from langchain_text_splitters import  RecursiveCharacterTextSplitter
 splitter = RecursiveCharacterTextSplitter.from_tiktoken_encoder(chunk_size= 350 , chunk_overlap = 50 )
 page_content = train_Df["text"].tolist()
 metadata = train_Df[["label"]].to_dict(orient ="records")
 train_Df_doc = splitter.create_documents(page_content, metadatas= metadata )
 print("----------------")
-print("length of the  Chunk Doc \n")
+print("Total Chunks Created\n")
 print (len(train_Df_doc))
 print("----------------")
 print("First  Chunk  \n")
@@ -69,5 +70,6 @@ chunk_DF = pd.DataFrame(data)
 print("----------------")
 print(" chunk DF   \n")
 print (chunk_DF)
+# Uncomment the line below to create a csv file 
 #chunk_DF.to_csv("data/chunks/chunks.csv" , index = False ) 
 
