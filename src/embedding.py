@@ -1,0 +1,23 @@
+import pandas as pd 
+import time 
+from sentence_transformers import SentenceTransformer
+model = SentenceTransformer("all-MiniLM-L6-v2")
+def embedd (chunk_train_Df ):
+    start_time = time.time()
+    text_list_input =chunk_train_Df["text"].tolist()
+    label_list_input=  chunk_train_Df["label"].tolist()
+    text_vector_output_list = model.encode(text_list_input, show_progress_bar=True) # this is embedded list 
+    embedding_list =text_vector_output_list.tolist()
+    print (text_vector_output_list.shape)
+    print (text_vector_output_list[:5])
+    data_ ={
+        "text": text_list_input,
+        "embedding": embedding_list,
+        "label": label_list_input
+    }
+    updated_ebedded_dataframe = pd.DataFrame(data_)
+    end_time = time.time()
+    total_time = end_time- start_time
+    print ( " Total time in embedding = " , total_time)
+    return updated_ebedded_dataframe
+    

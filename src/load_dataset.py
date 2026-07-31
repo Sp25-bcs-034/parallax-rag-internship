@@ -1,6 +1,7 @@
 from datasets import load_dataset
 import pandas as pd
-from clean_data import cleaning 
+from clean_data import cleaning  
+from chunking import chunking
 train_Df = pd.read_csv("data/raw/ag_news.csv")
 #train_Df.to_csv("data/raw/ag_news.csv", index=False)
 train_Df = cleaning(train_Df)
@@ -34,42 +35,23 @@ except Exception as e:
 train_Df.to_csv("data/cleaned/clean_ag_news.csv" , index = False )
 #print (pd.read_csv("data/cleaned/clean_ag_news.csv"))
 # chunking 
-print ("\n ---- CHUNKING  -----")
 from langchain_text_splitters import  RecursiveCharacterTextSplitter
 splitter = RecursiveCharacterTextSplitter.from_tiktoken_encoder(chunk_size= 350 , chunk_overlap = 50 )
-page_content = train_Df["text"].tolist()
-metadata = train_Df[["label"]].to_dict(orient ="records")
-train_Df_doc = splitter.create_documents(page_content, metadatas= metadata )
-print("----------------")
-print("Total Chunks Created\n")
-print (len(train_Df_doc))
-print("----------------")
-print("First  Chunk  \n")
-print (train_Df_doc[0].page_content)
-print("----------------")
-print(" First  Metadata  \n")
-print(train_Df_doc[0].metadata)
-print("----------------")
-print(" length of first chunk   \n")
-print(len(train_Df_doc[0].page_content))
-print("----------------")
-print("First  3 Chunk  \n")
-for i in range(3):
-    print("----------------")
-    print(train_Df_doc[i].page_content)
-list_text =[]
-for doc in (train_Df_doc):
-    list_text.append(doc.page_content)  
-list_metadata =[]
-for doc in  train_Df_doc:
-    list_metadata.append (doc.metadata["label"])  
-data = { 
-    "text" : list_text,
-    "label": list_metadata }    
-chunk_DF = pd.DataFrame(data)   
-print("----------------")
-print(" chunk DF   \n")
-print (chunk_DF)
+chunk_DF=chunking(splitter , train_Df)
 # Uncomment the line below to create a csv file 
 #chunk_DF.to_csv("data/chunks/chunks.csv" , index = False ) 
-
+# embedding 
+from embedding import embedd
+from sentence_transformers import SentenceTransformer
+#model = SentenceTransformer("all-MiniLM-L6-v2")
+print ( "  ....Embedding .....")
+embedded_DF = embedd(chunk_DF )
+# chormadb 
+from chromaDb import storing
+print ( "  ....storing to chromadb ......")
+collection = storing(embedded_DF)
+# semantic search 
+from semantic_Search import semnatic_Search , retrival_bechmark
+print ( "  .... Semantic Search ......")
+semnatic_Search(collection)
+retrival_bechmark(collection)
