@@ -198,3 +198,16 @@ Week 2 focuses on:
 - Text Chunking
 - Embedding Generation
 - Vector Database (ChromaDB)
+# Week 2 – Chunking, Embeddings & Vector Database
+
+## Completed
+
+- Implemented RecursiveCharacterTextSplitter
+- Chunk Size = 350
+- Chunk Overlap = 50
+- Generated embeddings using SentenceTransformer (all-MiniLM-L6-v2)
+- Logged embedding generation time
+- Stored embeddings inside ChromaDB Persistent Client
+- Implemented semantic similarity search
+- Measured retrieval latency
+- Added unit tests for data cleaning, chunking, embedding and ChromaDB
