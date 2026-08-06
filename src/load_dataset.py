@@ -46,12 +46,13 @@ from sentence_transformers import SentenceTransformer
 #model = SentenceTransformer("all-MiniLM-L6-v2")
 print ( "  ....Embedding .....")
 embedded_DF = embedd(chunk_DF )
-# chormadb 
+# chromadb 
 from chromaDb import storing
 print ( "  ....storing to chromadb ......")
 collection = storing(embedded_DF)
 # semantic search 
-from semantic_Search import semnatic_Search , retrival_bechmark
+from semantic_Search import semnatic_Search , retrival_bechmark , chatting
 print ( "  .... Semantic Search ......")
 semnatic_Search(collection)
 retrival_bechmark(collection)
+chatting (collection)

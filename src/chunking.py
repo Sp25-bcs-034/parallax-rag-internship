@@ -31,7 +31,7 @@ def chunking ( splitter , train_Df):
     data = { 
     "text" : list_text,
     "label": list_metadata }    
-    chunk_DF = pd.DataFrame(data)   
+    chunk_DF = pd.DataFrame(data)    
     print("----------------")
     print(" chunk DF   \n")
     print (chunk_DF)
