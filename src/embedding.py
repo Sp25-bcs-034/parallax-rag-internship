@@ -20,4 +20,7 @@ def embedd (chunk_train_Df ):
     total_time = end_time- start_time
     print ( " Total time in embedding = " , total_time)
     return updated_ebedded_dataframe
-    
+def embeded_for_query  (text):
+    query_embede_list = model.encode(text).tolist()
+    return query_embede_list
+       
