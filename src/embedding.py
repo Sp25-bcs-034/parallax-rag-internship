@@ -15,6 +15,10 @@ def embedd (chunk_train_Df ):
         "embedding": embedding_list,
         "label": label_list_input
     }
+    # NEW: carry NLP metadata columns through if they exist
+    for optional_col in ["topic_id", "topic_label", "sentiment", "sentiment_score"]:
+        if optional_col in chunk_train_Df.columns:
+           data_[optional_col] = chunk_train_Df[optional_col].tolist()
     updated_ebedded_dataframe = pd.DataFrame(data_)
     end_time = time.time()
     total_time = end_time- start_time

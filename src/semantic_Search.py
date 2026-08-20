@@ -13,7 +13,6 @@ def semnatic_Search (collection):
     )
     
     
-   
     end_text=  time.time()
     Retrieval_time = end_text -  start_time
     print (" Semantic Search ")
@@ -91,4 +90,28 @@ def chatting (collection):
         total_time = generation_time + Retrieval_time
         print ("Total latency :"  ,total_time )
     
-    
+def filtered_search(collection):
+    if collection.count() == 0:
+        print("Database is empty.")
+        return
+
+    text = input("Ask a question: ")
+    sentiment_filter = input("Filter by sentiment (POSITIVE/NEGATIVE/skip): ").strip().upper()
+
+    query_list_embeded = embeded_for_query(text)
+
+    where_clause = None
+    if sentiment_filter in ("POSITIVE", "NEGATIVE"):
+        where_clause = {"sentiment": sentiment_filter}
+
+    results = collection.query(
+        query_embeddings=[query_list_embeded],
+        n_results=3,
+        where=where_clause,
+    )
+
+    print("\nFiltered Results\n")
+    for i in range(len(results["documents"][0])):
+        print("--------------------")
+        print(results["documents"][0][i])
+        print(results["metadatas"][0][i])    

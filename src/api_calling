@@ -46,16 +46,16 @@ def calling_Api (question ,context,api_key = api_key):
         data = response.json()
         return data ["choices"][0]["message"]["content"]
     elif (response.status_code == 401):
-        print ("Unauthorized access. Check your API key.")
+        print("Unauthorized access. Check your API key.")
         return None
     elif (response.status_code == 429):
-        print ("Rate limit exceeded. Please try again later.")
+        print("Rate limit exceeded. Please try again later.")
         return None
     elif (response.status_code == 413):
-        print ("Request entity too large. Please reduce the size of your request.")
+        print("Request entity too large. Please reduce the size of your request.")
         return None
     elif (response.status_code == 500):
-        print ("Internal server error. Please try again later.")
+        print("Internal server error. Please try again later.")
         return None
     else:
         print (f"Unexpected error: {response.status_code}")
