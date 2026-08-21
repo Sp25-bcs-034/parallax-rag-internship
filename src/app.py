@@ -5,12 +5,14 @@ def fetch_collection ():
         get_collection()
     else:
         return existing_collection()
-collection = fetch_collection()
+def main() :    
+    collection = fetch_collection()
 # semantic search 
-from semantic_Search import semnatic_Search , retrival_bechmark , chatting
-collection = get_collection()
-chunk_DF = get_chunk_Df()
-print ( "  .... Semantic Search ......")
-semnatic_Search(collection)
-retrival_bechmark(collection)
-chatting (collection)
+    from semantic_Search import semnatic_Search , retrival_bechmark , chatting
+    collection = get_collection()
+    chunk_DF = get_chunk_Df()
+    print ( "  .... Semantic Search ......")
+    semnatic_Search(collection)
+    retrival_bechmark(collection)
+    chatting (collection)
+    

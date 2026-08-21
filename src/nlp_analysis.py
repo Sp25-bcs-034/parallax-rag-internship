@@ -1,20 +1,21 @@
 import pandas as pd
 from transformers import pipeline
 
+
 _sentiment_pipeline = None
 
 
 def get_sentiment_pipeline():
     """Load the model once, reuse it - same principle as your embedding model."""
+
     global _sentiment_pipeline
+
     if _sentiment_pipeline is None:
-        _sentiment_pipeline = pipeline(
-            "sentiment-analysis",
-            model="distilbert-base-uncased-finetuned-sst-2-english",
+        _sentiment_pipeline = pipeline(task="text-classification",
+            model="distilbert-base-uncased-finetuned-sst-2-english"
         )
+
     return _sentiment_pipeline
-
-
 def add_sentiment(chunk_DF, batch_size=16):
     """
     Adds two columns to chunk_DF:

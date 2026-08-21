@@ -1,10 +1,9 @@
 import os 
 import requests 
 import json
-from dotenv import load_dotenv
-load_dotenv()
+#from dotenv import load_dotenv
+#load_dotenv()
 api_key = os.environ.get("OPENROUTER_API_KEY")
-
 
 def calling_Api (question ,context,api_key = api_key):
     if api_key is None:
@@ -14,7 +13,7 @@ def calling_Api (question ,context,api_key = api_key):
 
     url ="https://openrouter.ai/api/v1/chat/completions"
     headers = {
-         "Authorization":  f"Bearer {api_key}",
+        "Authorization":  f"Bearer {api_key}",
     "Content-Type": "application/json",
     }
     system_sms= "You are a helpful AI assistant. Answer ONLY using the provided context.If the answer is not present in the context .reply exactly: I don't know.Do not make up information."
@@ -61,4 +60,4 @@ def calling_Api (question ,context,api_key = api_key):
         print (f"Unexpected error: {response.status_code}")
         print(response.text)
         return None
-    
+print ("api calling module loaded successfully")    
