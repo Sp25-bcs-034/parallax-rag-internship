@@ -35,27 +35,6 @@ The project covers:
 - API testing
 
 ---
-parallax-rag-internship/
-
-│
-├── data/
-│   ├── raw/
-│   │   └── ag_news.csv
-│   │
-│   └── cleaned/
-│       └── clean_ag_news.csv
-│
-├── src/
-│   ├── load_dataset.py
-│   ├── clean_data.py
-│   └── verify_environment.py
-│
-├── tests/
-│   └── test_clean_data.py
-│
-├── requirements.txt
-├── README.md
-└── .gitignore
 
 # Week 1 – Environment Setup, Data Acquisition & Cleaning
 
@@ -92,98 +71,180 @@ The AG News dataset contains news articles belonging to different news categorie
 
 ## Project Structure
 
-Features Implemented
-Environment Setup
-Created Python virtual environment
-Installed required libraries
-Verified package installation
-Dataset Loading
+```text
+parallax-rag-internship/
+
+│
+├── data/
+│   ├── raw/
+│   │   └── ag_news.csv
+│   │
+│   └── cleaned/
+│       └── clean_ag_news.csv
+│
+├── src/
+│   ├── load_dataset.py
+│   ├── clean_data.py
+│   └── verify_environment.py
+│
+├── tests/
+│   └── test_clean_data.py
+│
+├── requirements.txt
+├── README.md
+└── .gitignore
+```
+
+---
+
+## Features Implemented
+
+### Environment Setup
+
+- Created Python virtual environment
+- Installed required libraries
+- Verified package installation
+
+---
+
+### Dataset Loading
 
 Downloaded the AG News dataset using Hugging Face Datasets and converted it into a Pandas DataFrame.
 
-Exploratory Data Analysis (EDA)
+---
+
+### Exploratory Data Analysis (EDA)
 
 Performed:
 
-Display first five rows
-Dataset information
-Statistical summary
-Shape
-Column names
-Label distribution
-Missing value analysis
-Data Cleaning
+- Display first five rows
+- Dataset information
+- Statistical summary
+- Shape
+- Column names
+- Label distribution
+- Missing value analysis
+
+---
+
+### Data Cleaning
 
 Implemented cleaning functions to:
 
-Remove duplicate rows
-Remove missing values
-Remove empty text
-Calculate text length
-Data Quality Report
+- Remove duplicate rows
+- Remove missing values
+- Remove empty text
+- Calculate text length
+
+---
+
+### Data Quality Report
 
 Generated:
 
-Missing values report
-Duplicate report
-Data types
-Label distribution
-Text length statistics
-Output
+- Missing values report
+- Duplicate report
+- Data types
+- Label distribution
+- Text length statistics
+
+---
+
+## Output
 
 Generated:
 
+```text
 data/raw/ag_news.csv
+```
 
 and:
 
+```text
 data/cleaned/clean_ag_news.csv
+```
 
 The cleaned dataset was prepared for the next stage of the project: text chunking and embedding generation.
 
-Technologies Used
-Python
-Pandas
-Hugging Face Datasets
-How to Run
-Install dependencies
+---
+
+## Technologies Used
+
+- Python
+- Pandas
+- Hugging Face Datasets
+
+---
+
+## How to Run
+
+### Install dependencies
+
+```bash
 pip install -r requirements.txt
-Verify environment
+```
+
+### Verify environment
+
+```bash
 python src/verify_environment.py
-Run data loading
+```
+
+### Run data loading
+
+```bash
 python src/load_dataset.py
-Week 1 Deliverables
-Environment configured
-Dataset acquired
-Data validated
-Data cleaned
-Data quality report generated
-Clean dataset exported
-Week 2 – Chunking, Embeddings & Vector Database
-Objectives & Tasks
-Implement a text chunking strategy.
-Generate embeddings using Sentence Transformers.
-Measure embedding generation performance.
-Set up ChromaDB.
-Store chunks and embeddings in the vector database.
-Implement semantic similarity search.
-Measure retrieval latency.
-Add unit tests for the implemented components.
-Completed
-Implemented RecursiveCharacterTextSplitter
-Chunk Size = 350
-Chunk Overlap = 50
-Generated embeddings using SentenceTransformer (all-MiniLM-L6-v2)
-Logged embedding generation time
-Stored embeddings inside ChromaDB Persistent Client
-Implemented semantic similarity search
-Measured retrieval latency
-Added unit tests for:
-Data cleaning
-Chunking
-Embedding
-ChromaDB
-RAG Data Flow
+```
+
+---
+
+## Week 1 Deliverables
+
+- Environment configured
+- Dataset acquired
+- Data validated
+- Data cleaned
+- Data quality report generated
+- Clean dataset exported
+
+---
+
+# Week 2 – Chunking, Embeddings & Vector Database
+
+## Objectives & Tasks
+
+- Taking your work from Week 1, implement a text chunking strategy.
+- Generate embeddings using Sentence Transformers.
+- Log embedding time performance.
+- Set up ChromaDB.
+- Ingest chunks and embeddings into the vector database.
+- Implement semantic search.
+- Write a script to test retrieval performance.
+- Measure and log retrieval latency.
+
+---
+
+## Completed
+
+- Implemented `RecursiveCharacterTextSplitter`
+- Chunk Size = 350
+- Chunk Overlap = 50
+- Generated embeddings using SentenceTransformer (`all-MiniLM-L6-v2`)
+- Logged embedding generation time
+- Stored embeddings inside ChromaDB Persistent Client
+- Implemented semantic similarity search
+- Measured retrieval latency
+- Added unit tests for:
+  - Data cleaning
+  - Chunking
+  - Embedding
+  - ChromaDB
+
+---
+
+## Week 2 RAG Data Flow
+
+```text
 Clean Dataset
       ↓
 Text Chunking
@@ -195,31 +256,47 @@ Vector Embeddings
 ChromaDB
       ↓
 Semantic Search
-Week 3 – LLM Integration & Prompt Engineering
-Objectives & Tasks
-Taking the work from Week 2, integrate the DeepSeek/OpenRouter API to generate answers from retrieved chunks.
-Implement prompt engineering best practices.
-Implement system prompts and context injection.
-Add robust API error handling.
-Handle rate limits, timeouts, and token limitations.
-Implement hallucination checks.
-Handle out-of-domain and off-topic queries.
-Measure end-to-end response latency.
-Completed
-Integrated the DeepSeek/OpenRouter API
-Connected the LLM with the existing RAG pipeline
-Passed retrieved chunks as context to the LLM
-Implemented prompt construction
-Added system prompt instructions
-Implemented context injection
-Added API error handling
-Handled unsuccessful API responses
-Added handling for hallucination and out-of-domain queries
-Measured retrieval latency
-Measured generation latency
-Measured total response latency
-Implemented RAG chatting mode
-RAG Generation Flow
+```
+
+---
+
+# Week 3 – LLM Integration & Prompt Engineering
+
+## Objectives & Tasks
+
+- Taking your work from Week 2, integrate the DeepSeek/OpenRouter API to generate answers from retrieved chunks.
+- Implement prompt engineering best practices.
+- Implement system prompts.
+- Implement context injection.
+- Add robust error handling for API calls.
+- Handle rate limits, timeouts, and token limits.
+- Implement hallucination checks.
+- Handle out-of-domain and off-topic queries.
+- Measure and log end-to-end response latency.
+
+---
+
+## Completed
+
+- Integrated the DeepSeek/OpenRouter API
+- Connected the LLM with the existing RAG pipeline
+- Connected retrieved ChromaDB chunks with the LLM
+- Implemented prompt construction
+- Implemented system prompt instructions
+- Implemented context injection
+- Added API error handling
+- Added handling for unsuccessful API responses
+- Implemented hallucination/out-of-domain handling
+- Measured retrieval latency
+- Measured generation latency
+- Measured total end-to-end latency
+- Implemented terminal-based RAG chatting mode
+
+---
+
+## Week 3 RAG Generation Flow
+
+```text
 User Question
       ↓
 Query Embedding
@@ -235,31 +312,42 @@ Question + Context
 DeepSeek/OpenRouter
       ↓
 Generated Answer
-Week 4 – NLP Analysis (Topic & Sentiment)
-Objectives & Tasks
-Taking the work from Week 3, apply NLP analysis to the corpus.
-Apply topic modeling / NLP techniques to discover corpus information.
-Implement sentiment analysis or NER.
-Evaluate NLP results.
-Validate outputs manually.
-Handle edge cases such as short documents and jargon.
-Integrate NLP metadata into the vector database.
-Implement filtered retrieval.
-Document the effectiveness of the extracted NLP metadata.
-Completed
-Implemented NLP analysis
-Added sentiment analysis
-Generated sentiment metadata
-Stored sentiment information as ChromaDB metadata
-Implemented metadata-based filtered retrieval
-Added support for:
-POSITIVE
-NEGATIVE
-Implemented semantic search with sentiment filtering
-Validated retrieved documents and metadata
-Added handling for an empty vector database
-Integrated NLP metadata into the retrieval workflow
-Filtered Retrieval Flow
+```
+
+---
+
+# Week 4 – NLP Analysis (Topic & Sentiment)
+
+## Objectives & Tasks
+
+- Taking your work from Week 3, apply topic modeling (BERTopic/LDA) to discover corpus themes.
+- Implement sentiment analysis or NER, evaluating accuracy against a small manually labeled set.
+- Validate topic outputs manually and handle edge cases such as short documents and jargon.
+- Integrate NLP metadata (topics/sentiment) into the vector database for filtered retrieval.
+- Document the effectiveness and accuracy of the extracted NLP metadata.
+
+---
+
+## Completed
+
+- Implemented NLP analysis
+- Added sentiment analysis
+- Generated sentiment metadata for documents
+- Integrated sentiment metadata into ChromaDB
+- Implemented filtered semantic search using sentiment metadata
+- Added support for:
+  - `POSITIVE`
+  - `NEGATIVE`
+- Tested filtered retrieval using ChromaDB metadata filtering
+- Validated retrieved documents and their metadata
+- Added handling for an empty ChromaDB collection
+- Integrated NLP metadata with the existing RAG retrieval pipeline
+
+---
+
+## Week 4 Filtered Retrieval Flow
+
+```text
 User Question
       ↓
 Query Embedding
@@ -274,27 +362,38 @@ Retrieved Context
       ↓
 LLM
       ↓
-Answer
-Week 5 – FastAPI, Retrieval Evaluation & Testing
-Objectives & Tasks
-Taking the work from Week 4, wrap the RAG system in a FastAPI application with proper endpoints.
-Implement structured request logging.
-Implement proper HTTP error responses:
-400
-422
-500
-Write a retrieval evaluation script calculating Precision@K and Recall@K on a test set.
-Write an automated end-to-end evaluation script for generation quality and latency.
-Write unit tests for the FastAPI endpoints using pytest.
-Week 5 Completed
-FastAPI Integration
+Generated Answer
+```
 
-The existing RAG pipeline was wrapped inside a FastAPI application.
+---
 
-FastAPI acts as the API layer between the client and the RAG pipeline.
+# Week 5 – FastAPI, Retrieval Evaluation & Testing
 
-The architecture is:
+## Objectives & Tasks
 
+- Taking your work from Week 4, wrap the RAG system in a FastAPI application with proper endpoints.
+- Implement structured request logging and proper HTTP error responses.
+- Handle HTTP errors:
+  - 400
+  - 422
+  - 500
+- Write a retrieval evaluation script calculating Precision@K and Recall@K on a test set.
+- Write an automated end-to-end evaluation script for generation quality and latency.
+- Write unit tests for the FastAPI endpoints using pytest.
+
+---
+
+# Week 5 – Completed
+
+## FastAPI Integration
+
+The RAG system was wrapped inside a FastAPI application.
+
+FastAPI provides the API layer that allows an external client to communicate with the RAG pipeline.
+
+The API flow is:
+
+```text
 Client
    ↓
 FastAPI
@@ -312,62 +411,94 @@ Context Construction
 LLM Generation
    ↓
 API Response
-FastAPI Application
+```
 
-Created a FastAPI application using:
+---
 
+## FastAPI Application
+
+Created the FastAPI application using:
+
+```python
 from fastapi import FastAPI
 
-The application provides API endpoints for interacting with the RAG system.
+app = FastAPI()
+```
 
-Pydantic Request Model
+The application exposes endpoints for interacting with the RAG system.
+
+---
+
+## Pydantic Request Model
 
 Implemented structured request validation using Pydantic:
 
-class QuestionRequest(BaseModel):
+```python
+from pydantic import BaseModel
+
+class Question(BaseModel):
     question: str
     n_results: int = 3
+```
 
 The request contains:
 
-question – the user's question
-n_results – number of relevant chunks to retrieve
+- `question` – the user's question
+- `n_results` – number of chunks to retrieve
 
-Example:
+Example request:
 
+```json
 {
     "question": "What is the latest oil price?",
     "n_results": 3
 }
-API Endpoints
-GET /
+```
 
-Used to verify that the API application is running.
+---
+
+## API Endpoints
+
+### GET `/`
+
+Used to check whether the FastAPI application is running.
 
 Example response:
 
+```json
 {
     "message": "Hey, this is Imara's RAG application"
 }
-POST /ask
+```
+
+---
+
+### POST `/ask`
 
 Used to send a question to the RAG system.
 
 The endpoint:
 
-Receives the user's question.
-Validates the request.
-Gets the ChromaDB collection.
-Creates the query embedding.
-Performs semantic retrieval.
-Retrieves relevant chunks.
-Builds the context.
-Sends the question and context to the LLM.
-Returns the generated answer.
-FastAPI RAG Flow
+1. Receives the user's question.
+2. Validates the request using Pydantic.
+3. Gets the ChromaDB collection.
+4. Generates an embedding for the question.
+5. Performs semantic retrieval.
+6. Retrieves the most relevant chunks.
+7. Combines the chunks into context.
+8. Sends the question and context to the LLM.
+9. Returns the generated answer.
+
+---
+
+## FastAPI RAG Flow
+
+```text
 POST /ask
      ↓
-QuestionRequest
+Question Request
+     ↓
+Pydantic Validation
      ↓
 Get ChromaDB Collection
      ↓
@@ -386,152 +517,240 @@ Call LLM API
 Generate Answer
      ↓
 Return JSON Response
-Retrieval Evaluation
+```
 
-A retrieval benchmark was implemented to evaluate the performance of semantic search.
+---
 
-The benchmark uses predefined test cases containing:
+## Semantic Search Integration
 
-Query
-Expected chunk ID
+The FastAPI RAG function connects the API layer with the existing semantic search and generation pipeline.
+
+The process is:
+
+```text
+Question
+   ↓
+Embedding
+   ↓
+ChromaDB Query
+   ↓
+Retrieved Documents
+   ↓
+Context
+   ↓
+LLM
+   ↓
+Final Answer
+```
+
+The number of retrieved documents is controlled using:
+
+```python
+n_results = question.n_results
+```
+
+This allows the API client to decide how many relevant chunks should be retrieved.
+
+---
+
+# Retrieval Benchmarking
+
+A retrieval benchmark was implemented using predefined test cases.
+
+Each test case contains:
+
+- Query
+- Expected correct chunk ID
 
 Example:
 
+```python
 {
     "query": "oil prices",
     "correct_chunk_id": "chunk_15"
 }
+```
 
-Other test queries include:
+Additional test cases include:
 
+```text
 football
 NASA mission
-Recall@K
+```
 
-The retrieval benchmark checks whether the expected chunk is present inside the retrieved top-K results.
+---
 
-Recall@K is calculated as:
+## Recall@3
 
-Recall@K =
+The retrieval benchmark checks whether the expected chunk is present inside the top 3 retrieved results.
+
+The calculation is:
+
+```text
+Recall@3 =
 Number of successful retrievals
 --------------------------------
 Total number of test cases
+```
 
-The benchmark reports the retrieval performance using Recall@3.
+The benchmark reports the retrieval performance as:
 
-Precision@K Evaluation
+```text
+Recall@3
+```
 
-Retrieval evaluation was extended to measure Precision@K.
+---
+
+# Precision@K
 
 Precision@K evaluates how many of the retrieved results are relevant to the query.
 
-Conceptually:
+The general formula is:
 
+```text
 Precision@K =
 Relevant Retrieved Results
 --------------------------
 Total Retrieved Results
+```
 
-This provides another way of evaluating the quality of the vector database retrieval.
+Precision@K provides an additional measure for evaluating the quality of semantic retrieval.
 
-Retrieval Latency
+---
 
-The system measures retrieval performance using timestamps.
+# Retrieval Latency
 
-The retrieval process measures the time taken to:
+Retrieval latency is measured using timestamps before and after the retrieval process.
 
-Create the query embedding
-Search ChromaDB
-Retrieve relevant chunks
+The system measures the time required for:
 
-The retrieval latency is calculated as:
+- Query embedding
+- ChromaDB semantic search
+- Retrieval of relevant chunks
 
+The calculation is:
+
+```text
 Retrieval Latency =
 Retrieval End Time - Retrieval Start Time
-Generation Evaluation
+```
 
-An automated end-to-end evaluation process was implemented to evaluate the generation stage of the RAG pipeline.
+---
 
-The evaluation considers:
+# Generation Latency
 
-Retrieved context
-Generated answer
-Response quality
-Generation latency
-Overall response latency
-End-to-End Latency
+The generation stage is also measured using timestamps.
 
-The system measures both retrieval and generation latency.
+The calculation is:
 
+```text
+Generation Latency =
+Generation End Time - Generation Start Time
+```
+
+This measures how long the LLM takes to generate the final answer.
+
+---
+
+# End-to-End Latency
+
+The RAG system measures the overall processing time.
+
+```text
 Retrieval Latency
        +
 Generation Latency
        =
 Total Latency
+```
 
-The generation latency is measured using:
+This helps evaluate the performance of the complete RAG pipeline.
 
-Generation Latency =
-Generation End Time - Generation Start Time
+---
 
-The total latency is measured using the retrieval and generation times.
+# Automated Generation Evaluation
 
-Request Logging
+An end-to-end evaluation process is used to evaluate the generation stage.
 
-Structured request logging was implemented to help monitor API activity.
+The evaluation considers:
 
-The logging system records important information related to API requests and processing.
+- User question
+- Retrieved context
+- Generated answer
+- Generation latency
+- Total response latency
 
-This helps with:
+The purpose is to evaluate whether the RAG pipeline is producing useful answers from retrieved information while also measuring performance.
 
-Debugging
-Monitoring
-Performance analysis
-Troubleshooting
-Tracking API behavior
-HTTP Error Handling
+---
 
-The API handles common HTTP errors and invalid requests.
+# Request Logging
 
-Implemented error categories include:
+Structured request logging is used to monitor API requests and application behavior.
 
-400 – Bad Request
+Logging helps with:
 
-Used when the request is invalid or cannot be processed because of incorrect client input.
+- Debugging
+- Monitoring
+- Performance analysis
+- Troubleshooting
+- Understanding API behavior
 
-422 – Validation Error
+---
 
-Used when the request does not match the required Pydantic schema.
+# HTTP Error Handling
 
-For example, if the API expects:
+The FastAPI application handles common request and server errors.
 
+## 400 – Bad Request
+
+Used when the client sends a request that cannot be processed because of invalid input.
+
+---
+
+## 422 – Validation Error
+
+FastAPI and Pydantic provide request validation.
+
+For example, the API expects:
+
+```json
 {
     "question": "What is RAG?",
     "n_results": 3
 }
+```
 
-but receives an invalid data type, FastAPI/Pydantic can return a validation error.
+If the request does not follow the required structure or contains an invalid data type, FastAPI can return a `422 Unprocessable Entity` response.
 
-500 – Internal Server Error
+---
+
+## 500 – Internal Server Error
 
 Used when an unexpected server-side error occurs while processing the request.
 
-FastAPI Testing
+---
 
-Unit tests were added using pytest to test the FastAPI endpoints.
+# FastAPI Testing
+
+Unit tests were implemented using `pytest` to test the API behavior.
 
 Testing covers:
 
-Root endpoint
-/ask endpoint
-Request validation
-API responses
-Error handling
-RAG API integration
-Complete RAG System
+- Root endpoint
+- `/ask` endpoint
+- Request validation
+- API responses
+- Error handling
+- RAG API integration
 
-After completing Week 5, the project contains the complete RAG workflow:
+---
 
+# Complete RAG System
+
+After Week 5, the project follows the complete RAG workflow:
+
+```text
                          AG NEWS DATASET
                                 ↓
                          DATA CLEANING
@@ -554,7 +773,7 @@ After completing Week 5, the project contains the complete RAG workflow:
                                 ↓
                        TOP-K RETRIEVAL
                                 ↓
-                         CONTEXT BUILDING
+                       CONTEXT BUILDING
                                 ↓
                     DEEPSEEK / OPENROUTER
                                 ↓
@@ -562,114 +781,218 @@ After completing Week 5, the project contains the complete RAG workflow:
                                 ↓
                             FASTAPI
                                 ↓
-                           API RESPONSE
-Complete Internship Progress
-Week 1 – Environment Setup, Data Acquisition & Cleaning
-Completed
-Environment setup
-AG News dataset acquisition
-Exploratory Data Analysis
-Data cleaning
-Data validation
-Data quality reporting
-Clean dataset generation
-Week 2 – Chunking, Embeddings & Vector Database
-Completed
-Recursive text chunking
-SentenceTransformer embeddings
-Embedding performance measurement
-ChromaDB integration
-Persistent vector database
-Semantic search
-Retrieval latency measurement
-Unit testing
-Week 3 – LLM Integration & Prompt Engineering
-Completed
-DeepSeek/OpenRouter API integration
-Prompt engineering
-System prompts
-Context injection
-API error handling
-Hallucination handling
-Out-of-domain query handling
-Retrieval latency
-Generation latency
-End-to-end latency
-RAG chatting mode
-Week 4 – NLP Analysis
-Completed
-NLP analysis
-Sentiment analysis
-Sentiment metadata
-ChromaDB metadata integration
-Sentiment-based filtered retrieval
-Metadata validation
-Empty database handling
-Week 5 – FastAPI, Retrieval Evaluation & Testing
-Completed
-FastAPI application
-GET / endpoint
-POST /ask endpoint
-Pydantic request validation
-RAG API integration
-ChromaDB retrieval through API
-Query embedding
-Top-K retrieval
-Context construction
-LLM integration
-Structured request logging
-HTTP error handling
-400 error handling
-422 validation handling
-500 error handling
-Retrieval benchmarking
-Precision@K
-Recall@K
-Generation-quality evaluation
-Retrieval latency measurement
-Generation latency measurement
-End-to-end latency evaluation
-pytest API tests
-Technologies Used
-Python
-Pandas
-Hugging Face Datasets
-Sentence Transformers
-ChromaDB
-FastAPI
-Pydantic
-DeepSeek
-OpenRouter
-pytest
-NLP / Sentiment Analysis
-Git
-GitHub
- 
-Project Learning Outcomes
+                         API RESPONSE
+```
 
-Through the internship, the project progressed from basic data preparation to a complete AI-powered RAG application.
+---
+
+# Complete Internship Progress
+
+## Week 1 – Environment Setup, Data Acquisition & Cleaning
+
+### Completed
+
+- Environment setup
+- AG News dataset acquisition
+- Exploratory Data Analysis
+- Data cleaning
+- Data validation
+- Data quality reporting
+- Clean dataset generation
+
+---
+
+## Week 2 – Chunking, Embeddings & Vector Database
+
+### Completed
+
+- Recursive text chunking
+- SentenceTransformer embeddings
+- Embedding performance measurement
+- ChromaDB integration
+- Persistent vector database
+- Semantic search
+- Retrieval latency measurement
+- Unit testing
+
+---
+
+## Week 3 – LLM Integration & Prompt Engineering
+
+### Completed
+
+- DeepSeek/OpenRouter API integration
+- Prompt engineering
+- System prompts
+- Context injection
+- API error handling
+- Hallucination handling
+- Out-of-domain query handling
+- Retrieval latency
+- Generation latency
+- End-to-end latency
+- RAG chatting mode
+
+---
+
+## Week 4 – NLP Analysis
+
+### Completed
+
+- NLP analysis
+- Sentiment analysis
+- Sentiment metadata
+- ChromaDB metadata integration
+- Sentiment-based filtered retrieval
+- Metadata validation
+- Empty database handling
+
+---
+
+## Week 5 – FastAPI, Retrieval Evaluation & Testing
+
+### Completed
+
+- FastAPI application
+- `GET /` endpoint
+- `POST /ask` endpoint
+- Pydantic request validation
+- RAG API integration
+- ChromaDB retrieval through API
+- Query embedding
+- Top-K retrieval
+- Context construction
+- LLM integration
+- Structured request logging
+- HTTP error handling
+- 400 error handling
+- 422 validation handling
+- 500 error handling
+- Retrieval benchmarking
+- Precision@K evaluation
+- Recall@K evaluation
+- Generation-quality evaluation
+- Retrieval latency measurement
+- Generation latency measurement
+- End-to-end latency evaluation
+- pytest API tests
+
+---
+
+# Technologies Used
+
+- Python
+- Pandas
+- Hugging Face Datasets
+- Sentence Transformers
+- ChromaDB
+- FastAPI
+- Pydantic
+- DeepSeek
+- OpenRouter
+- pytest
+- NLP / Sentiment Analysis
+- Git
+- GitHub
+
+---
+
+# Overall Project Architecture
+
+```text
+┌──────────────────────────────────────────┐
+│                  CLIENT                  │
+│            Web / API / Application       │
+└────────────────────┬─────────────────────┘
+                     │
+                     ▼
+┌──────────────────────────────────────────┐
+│                 FASTAPI                  │
+│                API Layer                 │
+│                                          │
+│       GET /          POST /ask           │
+└────────────────────┬─────────────────────┘
+                     │
+                     ▼
+┌──────────────────────────────────────────┐
+│                RAG PIPELINE              │
+│                                          │
+│   Question → Embedding → Retrieval       │
+│                         ↓                │
+│                  Context Building        │
+│                         ↓                │
+│                  LLM Generation          │
+└────────────────┬──────────────┬──────────┘
+                 │              │
+                 ▼              ▼
+        ┌────────────────┐  ┌────────────────┐
+        │    ChromaDB    │  │      LLM       │
+        │  Vector Store  │  │ DeepSeek /     │
+        │                │  │  OpenRouter    │
+        └────────────────┘  └────────────────┘
+```
+
+---
+
+# Project Learning Outcomes
+
+Through the internship, the project progressed from basic data preparation to an API-accessible AI-powered RAG application.
 
 The project demonstrates understanding and implementation of:
 
-Data preprocessing
-Dataset analysis
-Text chunking
-Vector embeddings
-Vector databases
-Semantic search
-Retrieval-Augmented Generation
-Prompt engineering
-LLM APIs
-NLP metadata
-Metadata filtering
-FastAPI
-REST API development
-Request validation
-Error handling
-Retrieval evaluation
-Generation evaluation
-Latency measurement
-Automated testing
+- Data preprocessing
+- Dataset analysis
+- Text chunking
+- Vector embeddings
+- Vector databases
+- Semantic search
+- Retrieval-Augmented Generation
+- Prompt engineering
+- LLM APIs
+- NLP metadata
+- Metadata filtering
+- FastAPI
+- REST API development
+- Request validation
+- Error handling
+- Retrieval evaluation
+- Precision@K
+- Recall@K
+- Generation evaluation
+- Latency measurement
+- Automated testing
 
+---
 
+# Final Status
 
+## Internship Progress
+
+```text
+Week 1  ✅ Completed
+Week 2  ✅ Completed
+Week 3  ✅ Completed
+Week 4  ✅ Completed
+Week 5  ✅ Completed
+```
+
+The internship project has progressed from raw dataset preparation to a complete RAG application with:
+
+- Data preprocessing
+- Chunking
+- Embeddings
+- Vector database
+- Semantic retrieval
+- NLP metadata
+- Filtered retrieval
+- LLM generation
+- Prompt engineering
+- FastAPI
+- Retrieval evaluation
+- Generation evaluation
+- Latency measurement
+- API testing
+
+---
+
+# 🚀 PROJECT END
