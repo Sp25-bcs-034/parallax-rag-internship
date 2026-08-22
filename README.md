@@ -35,6 +35,27 @@ The project covers:
 - API testing
 
 ---
+parallax-rag-internship/
+
+│
+├── data/
+│   ├── raw/
+│   │   └── ag_news.csv
+│   │
+│   └── cleaned/
+│       └── clean_ag_news.csv
+│
+├── src/
+│   ├── load_dataset.py
+│   ├── clean_data.py
+│   └── verify_environment.py
+│
+├── tests/
+│   └── test_clean_data.py
+│
+├── requirements.txt
+├── README.md
+└── .gitignore
 
 # Week 1 – Environment Setup, Data Acquisition & Cleaning
 
@@ -71,28 +92,6 @@ The AG News dataset contains news articles belonging to different news categorie
 
 ## Project Structure
 
-```text
-parallax-rag-internship/
-
-│
-├── data/
-│   ├── raw/
-│   │   └── ag_news.csv
-│   │
-│   └── cleaned/
-│       └── clean_ag_news.csv
-│
-├── src/
-│   ├── load_dataset.py
-│   ├── clean_data.py
-│   └── verify_environment.py
-│
-├── tests/
-│   └── test_clean_data.py
-│
-├── requirements.txt
-├── README.md
-└── .gitignore
 Features Implemented
 Environment Setup
 Created Python virtual environment
@@ -645,37 +644,7 @@ pytest
 NLP / Sentiment Analysis
 Git
 GitHub
-Overall Project Architecture
-┌──────────────────────────────────────────┐
-│                CLIENT                    │
-│          Web / API / Application         │
-└───────────────────┬──────────────────────┘
-                    │
-                    ▼
-┌──────────────────────────────────────────┐
-│                 FASTAPI                  │
-│              API Layer                   │
-│                                          │
-│       GET /          POST /ask           │
-└───────────────────┬──────────────────────┘
-                    │
-                    ▼
-┌──────────────────────────────────────────┐
-│              RAG PIPELINE                │
-│                                          │
-│   Query → Embedding → Retrieval          │
-│                    ↓                     │
-│             Context Building             │
-│                    ↓                     │
-│             LLM Generation               │
-└───────────────┬──────────────┬───────────┘
-                │              │
-                ▼              ▼
-        ┌──────────────┐  ┌──────────────┐
-        │   ChromaDB   │  │     LLM      │
-        │ Vector Store │  │ DeepSeek /   │
-        │              │  │  OpenRouter  │
-        └──────────────┘  └──────────────┘
+ 
 Project Learning Outcomes
 
 Through the internship, the project progressed from basic data preparation to a complete AI-powered RAG application.
@@ -701,12 +670,6 @@ Retrieval evaluation
 Generation evaluation
 Latency measurement
 Automated testing
-Final Status
-Internship Weeks Completed
-Week 1  ✅ Completed
-Week 2  ✅ Completed
-Week 3  ✅ Completed
-Week 4  ✅ Completed
-Week 5  ✅ Completed
 
-The RAG system has progressed from raw data processing to an API-accessible AI application with retrieval, generation, evaluation, and testing.
+
+
