@@ -1,6 +1,6 @@
 import sys
 sys.path.append("src")
-from nlp_analysis import get_sentiment_pipeline
+from src.nlp_analysis import get_sentiment_pipeline
 
 # Hand-labeled by YOU, reading 15-20 real examples from your dataset
 manual_test_set = [
