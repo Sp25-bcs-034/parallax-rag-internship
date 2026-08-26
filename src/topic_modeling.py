@@ -42,7 +42,7 @@ def add_topics(chunk_DF, min_topic_size=10):
             id_to_label[tid] = "outlier"
         else:
             top_words = topic_model.get_topic(tid)
-            id_to_label[tid] = ", ".join([w for w, _ in top_words[:3]])
+            id_to_label[tid] = ", ".join([w for w,_ in top_words[:3]])
 
     chunk_DF["topic_label"] = chunk_DF["topic_id"].map(id_to_label)
 

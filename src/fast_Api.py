@@ -24,11 +24,10 @@ def read_root():
 @app.post("/ask")
 def start_Chatting (  question_request : question ):
     start_time = time.time()
-    logger.info(f"Received question: '{question_request.question}' | n_results={question_request.n_results}")
+    logger.info(f"Recieved question: {question_request.question} with n_results: {question_request.n_results}")
     collection = get_collection()
     if not collection:
-        
-        return {"message": "Collection not found. Please ensure the collection is created."}
+        raise HTTPException(status_code=500, detail="Failed to load the collection.")
     if not question_request.question :
         logger.warning("Rejected empty question.")
         raise HTTPException(status_code=400, detail="Question is required.")

@@ -49,16 +49,26 @@ def retrival_bechmark (collection):
     Recall_at_3 = hits/ len(test_cases)
     print ( " .....Retrieval Bechmark .....")
     print ("Recall@3:" , Recall_at_3)
-        
-def chatting (collection ):
+def chatting(collection, text: str | None = None) -> str | None:
+    """Run the RAG pipeline for a user query.
+
+    Args:
+        collection: ChromaDB collection used for retrieval.
+        text: Optional query. If omitted, interactive input is used.
+
+    Returns:
+        The generated answer, or None if no answer was generated.
+    """
     if collection.count ()==0:
         print("Database is empty.")
         return
     print ("......  Chatting Mode  .....")
+    final_Ans = None
     while True :
-        text =input("Ask Any Question (type 'exit' to quit): ")
-        if text.lower() == 'exit':
-            break
+        if ( text == None) :
+            text =input("Ask Any Question (type 'exit' to quit): ")
+            if text.lower() == 'exit':
+                break
         retrieval_start_time = time.time()
         # embed the query and retrieve relevant chunks from the collection
         query_list_embeded = embeded_for_query(text)
@@ -81,6 +91,7 @@ def chatting (collection ):
             print("No answer generated.")
         else:
             print(final_ans)
+            final_Ans = final_ans
             
         
         Retrieval_time = retrieval_end_time -  retrieval_start_time
@@ -89,6 +100,7 @@ def chatting (collection ):
         print ("Retrieval latency :"  ,Retrieval_time )
         total_time = generation_time + Retrieval_time
         print ("Total latency :"  ,total_time )
+    return final_Ans    
     
 def filtered_search(collection):
     if collection.count() == 0:
@@ -115,6 +127,7 @@ def filtered_search(collection):
         print("--------------------")
         print(results["documents"][0][i])
         print(results["metadatas"][0][i])    
+from fastapi import HTTPException        
 def fastapi_question_chat (collection , question ):
     
     if collection.count ()==0:
@@ -132,13 +145,13 @@ def fastapi_question_chat (collection , question ):
         )
     except Exception as e:
         print(f"Error occurred while querying the collection: {e}")
-        return { "message" : "Error occurred while querying the collection."}
+        raise HTTPException(status_code=500, detail="Error occurred while querying the collection.")
 
     retrieval_end_time = time.time()
     if not results["documents"][0]:
         print("No relevant documents found.")
-        return { " message " : "No relevant documents found."}
-    
+        raise HTTPException(status_code=404, detail="No relevant documents found.")
+
     retrived_chunks = results["documents"][0]
     context = "\n\n".join(retrived_chunks)
     generation_start_time = time.time()
@@ -146,13 +159,13 @@ def fastapi_question_chat (collection , question ):
         final_ans = calling_Api(text, context)
     except Exception as e:
         print(f"Error occurred while generating the answer: {e}")
-        return { "message" : "Error occurred while generating the answer."}
+        raise HTTPException(status_code=500, detail="Error occurred while generating the answer.")
     generation_end_time = time.time()
     print("--------------------")
     print("Final Answer:\n")
     if final_ans is None :
         print("No answer generated.")
-        return { "message" : "No answer generated."}
+        raise HTTPException(status_code=404, detail="No answer generated.")
     else:
         print(final_ans)
         return { "message" : final_ans}
@@ -166,34 +179,36 @@ def fastapi_question_chat (collection , question ):
     print ("Total latency :"  ,total_time )
         
     
-def precision_recall_at_k(collection, model, test_cases, k=5):
+def  retrival_ (collection , k=3 ):
+    test_Case =[ {"query": "what is rag " , "correct_chunk_id": ["chunk_1"]},
+                {"query": "what is the best model for rag" , "correct_chunk_id": ["chunk_2"]}]
     precision_scores = []
     recall_scores = []
+    retrival_start_time = time.time()
+    for case in test_Case:
+        query_list_embedded = embeded_for_query(case["query"])
+        results = collection.query(
+            query_embeddings=[query_list_embedded],
+            n_results=k
+        )
+        result_chunk_ids =  results["ids"][0]
+        truth_Ans = set(case["correct_chunk_id"]) & set(result_chunk_ids)
+        Recall_k = len (truth_Ans) / len (case["correct_chunk_id"])
+        recall_scores.append(Recall_k)
+        print(f"Query: {case['query']}, Recall@k: {Recall_k}")
+        if len(result_chunk_ids) !=0  :
+            precisionK = len(truth_Ans) / k
+            print(f"Query: {case['query']}, Precision@k: {precisionK}")
+            precision_scores.append(precisionK)
+    retival_end_time = time.time()
+    retrieval_time = retival_end_time - retrival_start_time
+    if len(precision_scores )  !=0 :
+        avg_precision = sum(precision_scores) / len(precision_scores) 
+        print(f"Average Precision@k: {avg_precision}")
+    if len(recall_scores) != 0:
+        avg_recall = sum(recall_scores) / len(recall_scores)
+        print(f"Average Recall@k: {avg_recall}")   
+    print(f"Total evaluation time: {retrieval_time:.2f}s")   
+     
 
-    for case in test_cases:
-        query_embedding = model.encode(case["query"]).tolist()
-        results = collection.query(query_embeddings=[query_embedding], n_results=k)
-
-        retrieved_ids = set(results["ids"][0])
-        relevant_ids = case["relevant_ids"]
-
-        true_positives = retrieved_ids & relevant_ids
-
-        precision = len(true_positives) / k
-        recall = len(true_positives) / len(relevant_ids)
-
-        precision_scores.append(precision)
-        recall_scores.append(recall)
-
-        print(f"Query: '{case['query']}'")
-        print(f"  Retrieved: {retrieved_ids}")
-        print(f"  Relevant:  {relevant_ids}")
-        print(f"  Precision@{k}: {precision:.2f} | Recall@{k}: {recall:.2f}\n")
-
-    avg_precision = sum(precision_scores) / len(precision_scores)
-    avg_recall = sum(recall_scores) / len(recall_scores)
-
-    print(f"Average Precision@{k}: {avg_precision:.2f}")
-    print(f"Average Recall@{k}: {avg_recall:.2f}")
-
-    return avg_precision, avg_recall            
+     

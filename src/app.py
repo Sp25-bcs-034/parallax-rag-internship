@@ -1,4 +1,5 @@
 from load_dataset import get_collection , get_chunk_Df  ,  the_pipeline , existing_collection
+
 def fetch_collection ():
     if not existing_collection():
         the_pipeline()
