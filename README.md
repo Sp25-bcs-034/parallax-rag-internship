@@ -1,8 +1,10 @@
+
 # Parallax Labs AI/ML Internship
 
 > **Project:** Retrieval-Augmented Generation (RAG) System  
 > **Internship:** Parallax Labs AI/ML Internship  
-> **Dataset:** AG News
+> **Dataset:** AG News  
+> **Tech Stack:** Python, LangChain, Sentence Transformers, ChromaDB, FastAPI, Pydantic, Pytest
 
 ---
 
@@ -10,709 +12,543 @@
 
 ## Project Overview
 
-This project is part of the Parallax Labs AI/ML Internship.
+This project was developed as part of the **Parallax Labs AI/ML Internship**.
 
-The goal of this internship project is to progressively build a complete Retrieval-Augmented Generation (RAG) system, starting from raw dataset preparation and moving toward an API-based AI application with retrieval, NLP analysis, LLM generation, evaluation, and testing.
+The goal of the internship project was to progressively build a complete **Retrieval-Augmented Generation (RAG) system** using the AG News dataset.
 
-The project covers:
+The project started with data preparation and NLP preprocessing and progressively evolved into a complete AI application containing:
 
-- Environment setup
-- Dataset acquisition
-- Exploratory Data Analysis (EDA)
-- Data cleaning and validation
+- Data cleaning
 - Text chunking
-- Embedding generation
-- Vector database integration
+- Text embeddings
+- Vector database storage
 - Semantic search
+- Topic modeling
+- Sentiment analysis
+- Metadata filtering
 - LLM integration
-- Prompt engineering
-- NLP analysis
-- Sentiment-based filtered retrieval
-- FastAPI integration
+- Retrieval-Augmented Generation
+- FastAPI deployment
 - Retrieval evaluation
 - Generation evaluation
-- Latency evaluation
-- API testing
+- Latency benchmarking
+- API testing with pytest
+- Documentation and reproducibility
 
 ---
 
-# Week 1 – Environment Setup, Data Acquisition & Cleaning
+# 🎯 Project Objectives
 
-## Objectives & Tasks
+The main objectives of this project were:
 
-- Set up the Python development environment.
-- Download and inspect a large real-world dataset.
-- Perform Exploratory Data Analysis (EDA).
-- Clean and validate the dataset.
-- Generate a data quality report.
-- Save the cleaned dataset for future RAG processing.
-
----
-
-## Dataset
-
-### Dataset: AG News
-
-Source: Hugging Face Datasets
-
-Number of Documents:
-
-- Train: 120,000
-- Test: 7,600
-
-Columns:
-
-- `text`
-- `label`
-
-The AG News dataset contains news articles belonging to different news categories and is used as the source corpus for the RAG system.
+1. Understand and preprocess a real-world NLP dataset.
+2. Split documents into meaningful text chunks.
+3. Convert text into numerical embedding vectors.
+4. Store and retrieve embeddings using a vector database.
+5. Implement semantic search.
+6. Add NLP metadata using topic modeling and sentiment analysis.
+7. Build a Retrieval-Augmented Generation pipeline.
+8. Expose the RAG system through a FastAPI API.
+9. Evaluate retrieval quality using Precision@K and Recall@K.
+10. Evaluate generation quality and latency.
+11. Test API behavior using pytest.
+12. Document the complete system and make the setup reproducible.
 
 ---
 
-## Project Structure
+# 🏗️ System Architecture
+
+The complete project follows this architecture:
+
+```text
+                         ┌───────────────────┐
+                         │    AG News        │
+                         │     Dataset       │
+                         └─────────┬─────────┘
+                                   │
+                                   ▼
+                         ┌───────────────────┐
+                         │   Data Cleaning   │
+                         └─────────┬─────────┘
+                                   │
+                                   ▼
+                         ┌───────────────────┐
+                         │     Chunking      │
+                         └─────────┬─────────┘
+                                   │
+                                   ▼
+                         ┌───────────────────┐
+                         │    Embeddings     │
+                         │ SentenceTransform │
+                         └─────────┬─────────┘
+                                   │
+                                   ▼
+                         ┌───────────────────┐
+                         │     ChromaDB      │
+                         │   Vector Store    │
+                         └─────────┬─────────┘
+                                   │
+                    ┌──────────────┴──────────────┐
+                    │                             │
+                    ▼                             ▼
+           ┌──────────────────┐         ┌──────────────────┐
+           │   NLP Metadata   │         │    User Query    │
+           │                  │         │                  │
+           │ Topic Modeling   │         │ Query Embedding  │
+           │ Sentiment        │         └────────┬─────────┘
+           └────────┬─────────┘                  │
+                    │                            │
+                    └──────────────┬─────────────┘
+                                   ▼
+                         ┌───────────────────┐
+                         │   Semantic Search │
+                         └─────────┬─────────┘
+                                   │
+                                   ▼
+                         ┌───────────────────┐
+                         │   Top-K Chunks    │
+                         └─────────┬─────────┘
+                                   │
+                                   ▼
+                         ┌───────────────────┐
+                         │ Context Building  │
+                         └─────────┬─────────┘
+                                   │
+                                   ▼
+                         ┌───────────────────┐
+                         │      LLM API      │
+                         └─────────┬─────────┘
+                                   │
+                                   ▼
+                         ┌───────────────────┐
+                         │   Generated       │
+                         │     Answer        │
+                         └─────────┬─────────┘
+                                   │
+                                   ▼
+                         ┌───────────────────┐
+                         │      FastAPI      │
+                         │     REST API      │
+                         └─────────┬─────────┘
+                                   │
+                                   ▼
+                              API Response
+````
+
+---
+
+# 🔄 Complete RAG Pipeline
+
+The RAG pipeline follows these steps:
+
+```text
+User Question
+      │
+      ▼
+Query Embedding
+      │
+      ▼
+Vector Similarity Search
+      │
+      ▼
+Retrieve Top-K Chunks
+      │
+      ▼
+Combine Retrieved Chunks
+      │
+      ▼
+Create Context
+      │
+      ▼
+Send Query + Context to LLM
+      │
+      ▼
+Generate Final Answer
+```
+
+The main idea behind RAG is to provide the language model with relevant retrieved information before generating the final answer.
+
+This helps ground the generated response in information retrieved from the project dataset.
+
+---
+
+# 📁 Project Structure
 
 ```text
 parallax-rag-internship/
-
 │
 ├── data/
 │   ├── raw/
-│   │   └── ag_news.csv
-│   │
-│   └── cleaned/
-│       └── clean_ag_news.csv
+│   ├── processed/
+│   └── chunks/
+│
+├── chroma_db/
 │
 ├── src/
-│   ├── load_dataset.py
+│   ├── __init__.py
+│   ├── app.py
+│   ├── call_api.py
+│   ├── chromaDb.py
+│   ├── chunking.py
 │   ├── clean_data.py
+│   ├── embedding.py
+│   ├── fast_Api.py
+│   ├── generational_latency.py
+│   ├── load_dataset.py
+│   ├── nlp_analysis.py
+│   ├── semantic_Search.py
+│   ├── topic_modeling.py
 │   └── verify_environment.py
 │
-├── tests/
-│   └── test_clean_data.py
+├── test/
+│   ├── test_Data.py
+│   ├── test_api.py
+│   ├── test_chromadb.py
+│   ├── test_chunk.py
+│   ├── test_embedding.py
+│   └── test_nlp_metadata.py
 │
 ├── requirements.txt
-├── README.md
-└── .gitignore
+├── packages.txt
+├── nlp_metadata_report.md
+└── README.md
 ```
 
 ---
 
-## Features Implemented
+# 🛠️ Technologies Used
 
-### Environment Setup
-
-- Created Python virtual environment
-- Installed required libraries
-- Verified package installation
-
----
-
-### Dataset Loading
-
-Downloaded the AG News dataset using Hugging Face Datasets and converted it into a Pandas DataFrame.
-
----
-
-### Exploratory Data Analysis (EDA)
-
-Performed:
-
-- Display first five rows
-- Dataset information
-- Statistical summary
-- Shape
-- Column names
-- Label distribution
-- Missing value analysis
+| Technology               | Purpose                   |
+| ------------------------ | ------------------------- |
+| Python                   | Main programming language |
+| Pandas                   | Dataset manipulation      |
+| NumPy                    | Numerical operations      |
+| LangChain Text Splitters | Text chunking             |
+| Sentence Transformers    | Text embeddings           |
+| ChromaDB                 | Vector database           |
+| FastAPI                  | API development           |
+| Pydantic                 | Request validation        |
+| Pytest                   | Automated testing         |
+| LLM API                  | Answer generation         |
+| Logging                  | API request/error logging |
 
 ---
 
-### Data Cleaning
+# 📊 Dataset
 
-Implemented cleaning functions to:
+## AG News
 
-- Remove duplicate rows
-- Remove missing values
-- Remove empty text
-- Calculate text length
+The project uses the **AG News dataset**, a text classification dataset containing news articles from four major categories:
 
----
+* World
+* Sports
+* Business
+* Sci/Tech
 
-### Data Quality Report
-
-Generated:
-
-- Missing values report
-- Duplicate report
-- Data types
-- Label distribution
-- Text length statistics
+The dataset was used as the source of documents for the RAG pipeline.
 
 ---
 
-## Output
+# 1️⃣ Data Preparation
 
-Generated:
+The first stage of the project prepares the raw dataset.
+
+The preprocessing pipeline includes:
+
+* Loading the dataset
+* Checking dataset structure
+* Handling missing values
+* Removing duplicates
+* Removing empty text
+* Inspecting text lengths
+* Preparing data for chunking
+
+The cleaned dataset is then passed to the chunking stage.
+
+---
+
+# 2️⃣ Text Chunking
+
+Large documents are divided into smaller pieces called **chunks**.
+
+The project uses:
 
 ```text
-data/raw/ag_news.csv
+RecursiveCharacterTextSplitter
 ```
 
-and:
+with the configured chunk size and overlap.
+
+The purpose of chunking is to make documents suitable for embedding and semantic retrieval.
+
+The resulting structure is approximately:
 
 ```text
-data/cleaned/clean_ag_news.csv
+Document
+│
+├── Chunk 1
+├── Chunk 2
+├── Chunk 3
+└── ...
 ```
 
-The cleaned dataset was prepared for the next stage of the project: text chunking and embedding generation.
+Each chunk retains associated metadata such as its original label.
 
 ---
 
-## Technologies Used
+# 3️⃣ Text Embeddings
 
-- Python
-- Pandas
-- Hugging Face Datasets
+Text chunks are converted into numerical vectors using a Sentence Transformer model.
 
----
-
-## How to Run
-
-### Install dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
-### Verify environment
-
-```bash
-python src/verify_environment.py
-```
-
-### Run data loading
-
-```bash
-python src/load_dataset.py
-```
-
----
-
-## Week 1 Deliverables
-
-- Environment configured
-- Dataset acquired
-- Data validated
-- Data cleaned
-- Data quality report generated
-- Clean dataset exported
-
----
-
-# Week 2 – Chunking, Embeddings & Vector Database
-
-## Objectives & Tasks
-
-- Taking your work from Week 1, implement a text chunking strategy.
-- Generate embeddings using Sentence Transformers.
-- Log embedding time performance.
-- Set up ChromaDB.
-- Ingest chunks and embeddings into the vector database.
-- Implement semantic search.
-- Write a script to test retrieval performance.
-- Measure and log retrieval latency.
-
----
-
-## Completed
-
-- Implemented `RecursiveCharacterTextSplitter`
-- Chunk Size = 350
-- Chunk Overlap = 50
-- Generated embeddings using SentenceTransformer (`all-MiniLM-L6-v2`)
-- Logged embedding generation time
-- Stored embeddings inside ChromaDB Persistent Client
-- Implemented semantic similarity search
-- Measured retrieval latency
-- Added unit tests for:
-  - Data cleaning
-  - Chunking
-  - Embedding
-  - ChromaDB
-
----
-
-## Week 2 RAG Data Flow
+The project uses:
 
 ```text
-Clean Dataset
-      ↓
-Text Chunking
-      ↓
-Embedding Generation
-      ↓
-Vector Embeddings
-      ↓
-ChromaDB
-      ↓
-Semantic Search
+all-MiniLM-L6-v2
 ```
 
----
-
-# Week 3 – LLM Integration & Prompt Engineering
-
-## Objectives & Tasks
-
-- Taking your work from Week 2, integrate the DeepSeek/OpenRouter API to generate answers from retrieved chunks.
-- Implement prompt engineering best practices.
-- Implement system prompts.
-- Implement context injection.
-- Add robust error handling for API calls.
-- Handle rate limits, timeouts, and token limits.
-- Implement hallucination checks.
-- Handle out-of-domain and off-topic queries.
-- Measure and log end-to-end response latency.
-
----
-
-## Completed
-
-- Integrated the DeepSeek/OpenRouter API
-- Connected the LLM with the existing RAG pipeline
-- Connected retrieved ChromaDB chunks with the LLM
-- Implemented prompt construction
-- Implemented system prompt instructions
-- Implemented context injection
-- Added API error handling
-- Added handling for unsuccessful API responses
-- Implemented hallucination/out-of-domain handling
-- Measured retrieval latency
-- Measured generation latency
-- Measured total end-to-end latency
-- Implemented terminal-based RAG chatting mode
-
----
-
-## Week 3 RAG Generation Flow
+Conceptually:
 
 ```text
-User Question
-      ↓
-Query Embedding
-      ↓
-ChromaDB Semantic Search
-      ↓
-Relevant Chunks
-      ↓
-Context Construction
-      ↓
-Question + Context
-      ↓
-DeepSeek/OpenRouter
-      ↓
-Generated Answer
+Text
+ ↓
+Embedding Model
+ ↓
+Vector
 ```
 
----
-
-# Week 4 – NLP Analysis (Topic & Sentiment)
-
-## Objectives & Tasks
-
-- Taking your work from Week 3, apply topic modeling (BERTopic/LDA) to discover corpus themes.
-- Implement sentiment analysis or NER, evaluating accuracy against a small manually labeled set.
-- Validate topic outputs manually and handle edge cases such as short documents and jargon.
-- Integrate NLP metadata (topics/sentiment) into the vector database for filtered retrieval.
-- Document the effectiveness and accuracy of the extracted NLP metadata.
+The resulting vectors represent the semantic meaning of the text and allow similarity-based retrieval.
 
 ---
 
-## Completed
+# 4️⃣ Vector Database — ChromaDB
 
-- Implemented NLP analysis
-- Added sentiment analysis
-- Generated sentiment metadata for documents
-- Integrated sentiment metadata into ChromaDB
-- Implemented filtered semantic search using sentiment metadata
-- Added support for:
-  - `POSITIVE`
-  - `NEGATIVE`
-- Tested filtered retrieval using ChromaDB metadata filtering
-- Validated retrieved documents and their metadata
-- Added handling for an empty ChromaDB collection
-- Integrated NLP metadata with the existing RAG retrieval pipeline
+The generated embeddings are stored in **ChromaDB**.
 
----
-
-## Week 4 Filtered Retrieval Flow
+Each stored document contains:
 
 ```text
-User Question
-      ↓
-Query Embedding
-      ↓
-ChromaDB
-      ↓
-Sentiment Metadata Filter
-      ↓
-Relevant Chunks
-      ↓
-Retrieved Context
-      ↓
-LLM
-      ↓
-Generated Answer
-```
-
----
-
-# Week 5 – FastAPI, Retrieval Evaluation & Testing
-
-## Objectives & Tasks
-
-- Taking your work from Week 4, wrap the RAG system in a FastAPI application with proper endpoints.
-- Implement structured request logging and proper HTTP error responses.
-- Handle HTTP errors:
-  - 400
-  - 422
-  - 500
-- Write a retrieval evaluation script calculating Precision@K and Recall@K on a test set.
-- Write an automated end-to-end evaluation script for generation quality and latency.
-- Write unit tests for the FastAPI endpoints using pytest.
-
----
-
-# Week 5 – Completed
-
-## FastAPI Integration
-
-The RAG system was wrapped inside a FastAPI application.
-
-FastAPI provides the API layer that allows an external client to communicate with the RAG pipeline.
-
-The API flow is:
-
-```text
-Client
-   ↓
-FastAPI
-   ↓
-Request Validation
-   ↓
-RAG Pipeline
-   ↓
+ID
+Document / Chunk
 Embedding
-   ↓
-ChromaDB Retrieval
-   ↓
-Context Construction
-   ↓
-LLM Generation
-   ↓
-API Response
+Metadata
 ```
-
----
-
-## FastAPI Application
-
-Created the FastAPI application using:
-
-```python
-from fastapi import FastAPI
-
-app = FastAPI()
-```
-
-The application exposes endpoints for interacting with the RAG system.
-
----
-
-## Pydantic Request Model
-
-Implemented structured request validation using Pydantic:
-
-```python
-from pydantic import BaseModel
-
-class Question(BaseModel):
-    question: str
-    n_results: int = 3
-```
-
-The request contains:
-
-- `question` – the user's question
-- `n_results` – number of chunks to retrieve
-
-Example request:
-
-```json
-{
-    "question": "What is the latest oil price?",
-    "n_results": 3
-}
-```
-
----
-
-## API Endpoints
-
-### GET `/`
-
-Used to check whether the FastAPI application is running.
-
-Example response:
-
-```json
-{
-    "message": "Hey, this is Imara's RAG application"
-}
-```
-
----
-
-### POST `/ask`
-
-Used to send a question to the RAG system.
-
-The endpoint:
-
-1. Receives the user's question.
-2. Validates the request using Pydantic.
-3. Gets the ChromaDB collection.
-4. Generates an embedding for the question.
-5. Performs semantic retrieval.
-6. Retrieves the most relevant chunks.
-7. Combines the chunks into context.
-8. Sends the question and context to the LLM.
-9. Returns the generated answer.
-
----
-
-## FastAPI RAG Flow
-
-```text
-POST /ask
-     ↓
-Question Request
-     ↓
-Pydantic Validation
-     ↓
-Get ChromaDB Collection
-     ↓
-Extract Question
-     ↓
-Create Query Embedding
-     ↓
-Semantic Search
-     ↓
-Retrieve Top-K Chunks
-     ↓
-Build Context
-     ↓
-Call LLM API
-     ↓
-Generate Answer
-     ↓
-Return JSON Response
-```
-
----
-
-## Semantic Search Integration
-
-The FastAPI RAG function connects the API layer with the existing semantic search and generation pipeline.
-
-The process is:
-
-```text
-Question
-   ↓
-Embedding
-   ↓
-ChromaDB Query
-   ↓
-Retrieved Documents
-   ↓
-Context
-   ↓
-LLM
-   ↓
-Final Answer
-```
-
-The number of retrieved documents is controlled using:
-
-```python
-n_results = question.n_results
-```
-
-This allows the API client to decide how many relevant chunks should be retrieved.
-
----
-
-# Retrieval Benchmarking
-
-A retrieval benchmark was implemented using predefined test cases.
-
-Each test case contains:
-
-- Query
-- Expected correct chunk ID
 
 Example:
 
-```python
+```text
+ID:
+chunk_15
+
+Document:
+"Oil prices increased..."
+
+Metadata:
 {
-    "query": "oil prices",
-    "correct_chunk_id": "chunk_15"
+    "label": "business",
+    "topic_id": 2,
+    "topic_label": "Finance",
+    "sentiment": "POSITIVE",
+    "sentiment_score": 0.82
 }
 ```
 
-Additional test cases include:
+ChromaDB is then used to retrieve documents that are semantically similar to a user query.
+
+---
+
+# 5️⃣ Semantic Search
+
+When a user asks a question:
 
 ```text
-football
-NASA mission
+"What happened to oil prices?"
+```
+
+the query is converted into an embedding.
+
+```text
+User Query
+     ↓
+Query Embedding
+     ↓
+ChromaDB
+     ↓
+Similarity Search
+     ↓
+Top-K Relevant Chunks
+```
+
+The retrieved documents are then used as context for the LLM.
+
+---
+
+# 6️⃣ NLP Analysis
+
+The project also adds NLP metadata to the chunks.
+
+The implemented analysis includes:
+
+## Topic Modeling
+
+Topic modeling identifies topics associated with documents.
+
+Metadata includes fields such as:
+
+```text
+topic_id
+topic_label
+```
+
+## Sentiment Analysis
+
+Sentiment analysis assigns sentiment information to documents.
+
+Metadata includes:
+
+```text
+sentiment
+sentiment_score
+```
+
+This metadata is stored along with the chunks.
+
+---
+
+# 7️⃣ Metadata Filtering
+
+The retrieved documents can also be filtered using metadata.
+
+For example:
+
+```text
+User Query:
+"What happened to the company?"
+
+Filter:
+POSITIVE
+```
+
+The retrieval process can use the sentiment metadata to restrict results.
+
+Conceptually:
+
+```text
+Query
+ ↓
+Embedding
+ ↓
+ChromaDB
+ ↓
+Metadata Filter
+ ↓
+Relevant Chunks
 ```
 
 ---
 
-## Recall@3
+# 8️⃣ LLM Integration
 
-The retrieval benchmark checks whether the expected chunk is present inside the top 3 retrieved results.
-
-The calculation is:
+After retrieving relevant chunks, the chunks are combined into a context.
 
 ```text
-Recall@3 =
-Number of successful retrievals
---------------------------------
-Total number of test cases
+Chunk 1
++
+Chunk 2
++
+Chunk 3
+      ↓
+   Context
 ```
 
-The benchmark reports the retrieval performance as:
+The context and user question are passed to the LLM.
 
 ```text
-Recall@3
-```
-
----
-
-# Precision@K
-
-Precision@K evaluates how many of the retrieved results are relevant to the query.
-
-The general formula is:
-
-```text
-Precision@K =
-Relevant Retrieved Results
---------------------------
-Total Retrieved Results
-```
-
-Precision@K provides an additional measure for evaluating the quality of semantic retrieval.
-
----
-
-# Retrieval Latency
-
-Retrieval latency is measured using timestamps before and after the retrieval process.
-
-The system measures the time required for:
-
-- Query embedding
-- ChromaDB semantic search
-- Retrieval of relevant chunks
-
-The calculation is:
-
-```text
-Retrieval Latency =
-Retrieval End Time - Retrieval Start Time
+Question + Retrieved Context
+             ↓
+            LLM
+             ↓
+       Generated Answer
 ```
 
 ---
 
-# Generation Latency
+# 9️⃣ Retrieval-Augmented Generation
 
-The generation stage is also measured using timestamps.
-
-The calculation is:
+The complete RAG process combines retrieval and generation.
 
 ```text
-Generation Latency =
-Generation End Time - Generation Start Time
+                    USER QUESTION
+                         │
+                         ▼
+                 Query Embedding
+                         │
+                         ▼
+                    ChromaDB
+                         │
+                         ▼
+                  Top-K Chunks
+                         │
+                         ▼
+                    Build Context
+                         │
+              ┌──────────┴──────────┐
+              │                     │
+              ▼                     ▼
+          User Query             Context
+              │                     │
+              └──────────┬──────────┘
+                         ▼
+                        LLM
+                         │
+                         ▼
+                  Final Answer
 ```
 
-This measures how long the LLM takes to generate the final answer.
-
 ---
 
-# End-to-End Latency
+# 🔟 FastAPI Application
 
-The RAG system measures the overall processing time.
+The RAG pipeline is exposed through a FastAPI application.
 
-```text
-Retrieval Latency
-       +
-Generation Latency
-       =
-Total Latency
+## Start the API
+
+Run:
+
+```bash
+uvicorn src.fast_Api:app --reload
 ```
 
-This helps evaluate the performance of the complete RAG pipeline.
+The API can then be accessed locally.
 
 ---
 
-# Automated Generation Evaluation
+# 📡 API Endpoints
 
-An end-to-end evaluation process is used to evaluate the generation stage.
+## GET `/`
 
-The evaluation considers:
+Checks whether the API application is running.
 
-- User question
-- Retrieved context
-- Generated answer
-- Generation latency
-- Total response latency
+### Example
 
-The purpose is to evaluate whether the RAG pipeline is producing useful answers from retrieved information while also measuring performance.
+```http
+GET /
+```
 
----
+### Response
 
-# Request Logging
-
-Structured request logging is used to monitor API requests and application behavior.
-
-Logging helps with:
-
-- Debugging
-- Monitoring
-- Performance analysis
-- Troubleshooting
-- Understanding API behavior
+```json
+{
+    "message": "..."
+}
+```
 
 ---
 
-# HTTP Error Handling
+## POST `/ask`
 
-The FastAPI application handles common request and server errors.
+Sends a question to the RAG system.
 
-## 400 – Bad Request
-
-Used when the client sends a request that cannot be processed because of invalid input.
-
----
-
-## 422 – Validation Error
-
-FastAPI and Pydantic provide request validation.
-
-For example, the API expects:
+### Request
 
 ```json
 {
@@ -721,278 +557,657 @@ For example, the API expects:
 }
 ```
 
-If the request does not follow the required structure or contains an invalid data type, FastAPI can return a `422 Unprocessable Entity` response.
+### Parameters
 
----
+| Parameter | Type    | Description                  |
+| --------- | ------- | ---------------------------- |
+| question  | string  | User's question              |
+| n_results | integer | Number of chunks to retrieve |
 
-## 500 – Internal Server Error
+### Response
 
-Used when an unexpected server-side error occurs while processing the request.
-
----
-
-# FastAPI Testing
-
-Unit tests were implemented using `pytest` to test the API behavior.
-
-Testing covers:
-
-- Root endpoint
-- `/ask` endpoint
-- Request validation
-- API responses
-- Error handling
-- RAG API integration
-
----
-
-# Complete RAG System
-
-After Week 5, the project follows the complete RAG workflow:
-
-```text
-                         AG NEWS DATASET
-                                ↓
-                         DATA CLEANING
-                                ↓
-                           CHUNKING
-                                ↓
-                         EMBEDDINGS
-                                ↓
-                           CHROMADB
-                                ↓
-                      SEMANTIC RETRIEVAL
-                                ↓
-                       NLP METADATA
-                                ↓
-                    FILTERED RETRIEVAL
-                                ↓
-                         USER QUESTION
-                                ↓
-                        QUERY EMBEDDING
-                                ↓
-                       TOP-K RETRIEVAL
-                                ↓
-                       CONTEXT BUILDING
-                                ↓
-                    DEEPSEEK / OPENROUTER
-                                ↓
-                       GENERATED ANSWER
-                                ↓
-                            FASTAPI
-                                ↓
-                         API RESPONSE
+```json
+{
+    "message": "Generated answer..."
+}
 ```
 
 ---
 
-# Complete Internship Progress
+# ⚠️ HTTP Error Handling
 
-## Week 1 – Environment Setup, Data Acquisition & Cleaning
+The API handles different types of errors.
 
-### Completed
+## 400 — Bad Request
 
-- Environment setup
-- AG News dataset acquisition
-- Exploratory Data Analysis
-- Data cleaning
-- Data validation
-- Data quality reporting
-- Clean dataset generation
+Used for invalid request conditions such as:
 
----
+* Empty question
+* Invalid `n_results`
 
-## Week 2 – Chunking, Embeddings & Vector Database
+Example:
 
-### Completed
-
-- Recursive text chunking
-- SentenceTransformer embeddings
-- Embedding performance measurement
-- ChromaDB integration
-- Persistent vector database
-- Semantic search
-- Retrieval latency measurement
-- Unit testing
-
----
-
-## Week 3 – LLM Integration & Prompt Engineering
-
-### Completed
-
-- DeepSeek/OpenRouter API integration
-- Prompt engineering
-- System prompts
-- Context injection
-- API error handling
-- Hallucination handling
-- Out-of-domain query handling
-- Retrieval latency
-- Generation latency
-- End-to-end latency
-- RAG chatting mode
-
----
-
-## Week 4 – NLP Analysis
-
-### Completed
-
-- NLP analysis
-- Sentiment analysis
-- Sentiment metadata
-- ChromaDB metadata integration
-- Sentiment-based filtered retrieval
-- Metadata validation
-- Empty database handling
-
----
-
-## Week 5 – FastAPI, Retrieval Evaluation & Testing
-
-### Completed
-
-- FastAPI application
-- `GET /` endpoint
-- `POST /ask` endpoint
-- Pydantic request validation
-- RAG API integration
-- ChromaDB retrieval through API
-- Query embedding
-- Top-K retrieval
-- Context construction
-- LLM integration
-- Structured request logging
-- HTTP error handling
-- 400 error handling
-- 422 validation handling
-- 500 error handling
-- Retrieval benchmarking
-- Precision@K evaluation
-- Recall@K evaluation
-- Generation-quality evaluation
-- Retrieval latency measurement
-- Generation latency measurement
-- End-to-end latency evaluation
-- pytest API tests
-
----
-
-# Technologies Used
-
-- Python
-- Pandas
-- Hugging Face Datasets
-- Sentence Transformers
-- ChromaDB
-- FastAPI
-- Pydantic
-- DeepSeek
-- OpenRouter
-- pytest
-- NLP / Sentiment Analysis
-- Git
-- GitHub
-
----
-
-# Overall Project Architecture
-
-```text
-┌──────────────────────────────────────────┐
-│                  CLIENT                  │
-│            Web / API / Application       │
-└────────────────────┬─────────────────────┘
-                     │
-                     ▼
-┌──────────────────────────────────────────┐
-│                 FASTAPI                  │
-│                API Layer                 │
-│                                          │
-│       GET /          POST /ask           │
-└────────────────────┬─────────────────────┘
-                     │
-                     ▼
-┌──────────────────────────────────────────┐
-│                RAG PIPELINE              │
-│                                          │
-│   Question → Embedding → Retrieval       │
-│                         ↓                │
-│                  Context Building        │
-│                         ↓                │
-│                  LLM Generation          │
-└────────────────┬──────────────┬──────────┘
-                 │              │
-                 ▼              ▼
-        ┌────────────────┐  ┌────────────────┐
-        │    ChromaDB    │  │      LLM       │
-        │  Vector Store  │  │ DeepSeek /     │
-        │                │  │  OpenRouter    │
-        └────────────────┘  └────────────────┘
+```json
+{
+    "detail": "Question is required."
+}
 ```
 
 ---
 
-# Project Learning Outcomes
+## 422 — Validation Error
 
-Through the internship, the project progressed from basic data preparation to an API-accessible AI-powered RAG application.
+FastAPI/Pydantic automatically handles invalid request data types or missing required fields.
 
-The project demonstrates understanding and implementation of:
+Example:
 
-- Data preprocessing
-- Dataset analysis
-- Text chunking
-- Vector embeddings
-- Vector databases
-- Semantic search
-- Retrieval-Augmented Generation
-- Prompt engineering
-- LLM APIs
-- NLP metadata
-- Metadata filtering
-- FastAPI
-- REST API development
-- Request validation
-- Error handling
-- Retrieval evaluation
-- Precision@K
-- Recall@K
-- Generation evaluation
-- Latency measurement
-- Automated testing
-
----
-
-# Final Status
-
-## Internship Progress
-
-```text
-Week 1  ✅ Completed
-Week 2  ✅ Completed
-Week 3  ✅ Completed
-Week 4  ✅ Completed
-Week 5  ✅ Completed
+```json
+{
+    "question": "What is RAG?",
+    "n_results": "three"
+}
 ```
 
-The internship project has progressed from raw dataset preparation to a complete RAG application with:
+---
 
-- Data preprocessing
-- Chunking
-- Embeddings
-- Vector database
-- Semantic retrieval
-- NLP metadata
-- Filtered retrieval
-- LLM generation
-- Prompt engineering
-- FastAPI
-- Retrieval evaluation
-- Generation evaluation
-- Latency measurement
-- API testing
+## 500 — Internal Server Error
+
+Used when an internal operation fails, such as:
+
+* Vector database query failure
+* Embedding failure
+* LLM generation failure
 
 ---
 
-# 🚀 PROJECT END
+# 📝 Request Logging
+
+The FastAPI application uses Python's logging system.
+
+The API records information such as:
+
+* Incoming requests
+* User question
+* Number of requested results
+* Warnings
+* Internal errors
+
+Logs are written to:
+
+```text
+api.log
+```
+
+---
+
+# 🧪 Testing
+
+The project uses **pytest** for automated testing.
+
+Tests cover:
+
+* Root endpoint
+* Valid `/ask` request
+* Empty question
+* Invalid data type
+* Missing required field
+* Invalid `n_results`
+
+Run tests using:
+
+```bash
+pytest
+```
+
+Expected output should show all implemented tests passing.
+
+---
+
+# 📈 Retrieval Evaluation
+
+The retrieval system is evaluated using:
+
+## Precision@K
+
+Precision@K measures how many of the retrieved K documents are relevant.
+
+```text
+Precision@K =
+Relevant Retrieved Documents
+----------------------------
+          K
+```
+
+For example, if 2 of the top 3 retrieved chunks are relevant:
+
+```text
+Precision@3 = 2 / 3
+             = 0.67
+```
+
+---
+
+## Recall@K
+
+Recall@K measures how many of the relevant documents were successfully retrieved.
+
+```text
+Recall@K =
+Relevant Retrieved Documents
+----------------------------
+Total Relevant Documents
+```
+
+---
+
+# 🤖 Generation Evaluation
+
+The project also evaluates generated answers.
+
+A keyword-based evaluation approach is used.
+
+For each test question:
+
+```text
+Question
+   ↓
+RAG Retrieval
+   ↓
+LLM Generation
+   ↓
+Generated Answer
+   ↓
+Keyword Evaluation
+```
+
+The percentage of expected keywords found in the generated answer is used as the generation-quality score.
+
+Example:
+
+```text
+Expected keywords:
+capital
+France
+
+Generated answer:
+"Paris is the capital of France."
+
+Keywords found:
+capital
+France
+
+Score:
+100%
+```
+
+This provides a simple automated baseline for generation quality.
+
+---
+
+# ⚡ Performance Benchmarks
+
+The project measures the following latency values:
+
+### Retrieval Latency
+
+Time required to:
+
+```text
+Query
+ ↓
+Embedding
+ ↓
+Vector Search
+```
+
+### Generation Latency
+
+Time required for the LLM to generate the final response.
+
+### Total Latency
+
+```text
+Total Latency =
+Retrieval Latency + Generation Latency
+```
+
+---
+
+# 📊 Evaluation Results
+
+> **Important:** Replace the placeholders below with the actual results produced by the evaluation scripts.
+
+## Retrieval Results
+
+| Metric      |       Result |
+| ----------- | -----------: |
+| Precision@3 | `ADD_RESULT` |
+| Recall@3    | `ADD_RESULT` |
+
+## Generation Results
+
+| Metric             |       Result |
+| ------------------ | -----------: |
+| Generation Quality | `ADD_RESULT` |
+
+## Latency Results
+
+| Metric                     |           Result |
+| -------------------------- | ---------------: |
+| Average Retrieval Latency  | `ADD_RESULT` sec |
+| Average Generation Latency | `ADD_RESULT` sec |
+| Average Total Latency      | `ADD_RESULT` sec |
+
+---
+
+# 📦 Installation
+
+## 1. Clone the Repository
+
+```bash
+git clone https://github.com/Sp25-bcs-034/parallax-rag-internship.git
+```
+
+## 2. Navigate to the Project
+
+```bash
+cd parallax-rag-internship
+```
+
+## 3. Create a Virtual Environment
+
+Windows:
+
+```bash
+python -m venv .venv
+```
+
+Activate:
+
+```bash
+.venv\Scripts\activate
+```
+
+Linux/macOS:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+## 4. Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+# ⚙️ Environment Configuration
+
+If the LLM API requires an API key, configure the required environment variable before running the application.
+
+Example:
+
+```text
+API_KEY=your_api_key_here
+```
+
+Do not commit API keys or other secrets to GitHub.
+
+---
+
+# ▶️ Running the Project
+
+## Run the FastAPI Application
+
+```bash
+uvicorn src.fast_Api:app --reload
+```
+
+The API will be available locally.
+
+FastAPI also provides interactive API documentation through Swagger UI.
+
+Open:
+
+```text
+/docs
+```
+
+---
+
+# 🔎 Example Queries
+
+Example questions can be sent to the `/ask` endpoint.
+
+```json
+{
+    "question": "What happened to oil prices?",
+    "n_results": 3
+}
+```
+
+Another example:
+
+```json
+{
+    "question": "What happened in the football match?",
+    "n_results": 3
+}
+```
+
+Another example:
+
+```json
+{
+    "question": "What did NASA announce?",
+    "n_results": 3
+}
+```
+
+The retrieved chunks are passed to the LLM as context for answer generation.
+
+---
+
+# 🧪 Running Evaluation
+
+Run the retrieval evaluation script to calculate:
+
+```text
+Precision@K
+Recall@K
+```
+
+Run the generation evaluation script to evaluate:
+
+```text
+Generation Quality
+Latency
+```
+
+The exact command depends on the final project entry point.
+
+---
+
+# 📊 Project Development by Week
+
+## WEEK 1 — Data Preparation
+
+Completed:
+
+* Dataset loading
+* Dataset inspection
+* Data cleaning
+* Missing-value handling
+* Duplicate removal
+* Exploratory analysis
+
+---
+
+## WEEK 2 — Chunking, Embeddings & Vector Database
+
+Completed:
+
+* Text chunking
+* RecursiveCharacterTextSplitter
+* Embedding generation
+* Sentence Transformer
+* ChromaDB integration
+* Vector storage
+* Semantic retrieval foundation
+
+---
+
+## WEEK 3 — RAG & LLM Integration
+
+Completed:
+
+* Semantic search
+* Context construction
+* LLM integration
+* RAG pipeline
+* Prompt-based answer generation
+* Retrieval and generation latency measurement
+
+---
+
+## WEEK 4 — NLP Analysis
+
+Completed:
+
+* Topic modeling
+* Topic metadata
+* Sentiment analysis
+* Sentiment score
+* Metadata integration
+* Metadata-based filtering
+
+---
+
+## WEEK 5 — Evaluation & API
+
+Completed:
+
+* FastAPI application
+* `/` endpoint
+* `/ask` endpoint
+* Pydantic request validation
+* HTTP 400 handling
+* HTTP 422 validation
+* HTTP 500 error handling
+* Request logging
+* Precision@K
+* Recall@K
+* Retrieval evaluation
+* Generation evaluation
+* Latency measurement
+* pytest API tests
+
+---
+
+## WEEK 6 — Documentation, Benchmarks & Launch
+
+Completed:
+
+* Codebase documentation
+* Docstrings
+* Type hints
+* Comprehensive README
+* Architecture documentation
+* Evaluation documentation
+* Performance benchmark documentation
+* Reproducible setup
+* Requirements documentation
+* Demo preparation
+* Final presentation preparation
+
+---
+
+# 🧠 Key Concepts Learned
+
+Through this project, the following AI Engineering concepts were implemented:
+
+### NLP
+
+* Text preprocessing
+* Text chunking
+* Topic modeling
+* Sentiment analysis
+
+### Embeddings
+
+* Semantic representation
+* Sentence Transformers
+* Query embeddings
+* Document embeddings
+
+### Vector Databases
+
+* ChromaDB
+* Vector storage
+* Similarity search
+* Metadata filtering
+
+### RAG
+
+* Retrieval
+* Context construction
+* Prompt construction
+* LLM generation
+
+### Backend Engineering
+
+* FastAPI
+* REST endpoints
+* Pydantic
+* HTTP status codes
+* Error handling
+* Logging
+
+### AI Evaluation
+
+* Precision@K
+* Recall@K
+* Generation-quality evaluation
+* Retrieval latency
+* Generation latency
+* Total latency
+
+### Testing
+
+* pytest
+* API endpoint testing
+* Validation testing
+* Error-condition testing
+
+---
+
+# 🔮 Future Improvements
+
+Possible improvements include:
+
+* More advanced retrieval evaluation datasets
+* More sophisticated generation evaluation metrics
+* LLM-as-a-judge evaluation
+* Reranking retrieved documents
+* Hybrid keyword + vector search
+* Better prompt engineering
+* Streaming responses
+* Authentication
+* Rate limiting
+* Docker deployment
+* Cloud deployment
+* Monitoring and observability
+* Improved logging
+* Production-grade database management
+
+---
+
+# 🎥 Demo
+
+A demonstration of the RAG API will show:
+
+```text
+Start FastAPI
+      ↓
+Open Swagger UI
+      ↓
+POST /ask
+      ↓
+Enter Question
+      ↓
+Retrieve Relevant Chunks
+      ↓
+Generate Answer
+      ↓
+Return API Response
+```
+
+> Add the final demo GIF/video here.
+
+---
+
+# 📑 Final Project Summary
+
+This project demonstrates the development of a complete Retrieval-Augmented Generation system from raw data preparation to API deployment and evaluation.
+
+The final system combines:
+
+```text
+Data
+ ↓
+Cleaning
+ ↓
+Chunking
+ ↓
+Embeddings
+ ↓
+Vector Database
+ ↓
+Semantic Search
+ ↓
+NLP Metadata
+ ↓
+Filtered Retrieval
+ ↓
+LLM
+ ↓
+RAG
+ ↓
+FastAPI
+ ↓
+Evaluation
+ ↓
+Testing
+```
+
+The project provides practical experience in building and evaluating an end-to-end AI application rather than only developing an isolated machine-learning model.
+
+---
+
+# 👨‍💻 Author
+
+**Imara Asim**
+
+Parallax Labs AI/ML Internship
+
+Project:
+
+**Retrieval-Augmented Generation (RAG) System**
+
+GitHub:
+
+[https://github.com/Sp25-bcs-034/parallax-rag-internship](https://github.com/Sp25-bcs-034/parallax-rag-internship)
+
+---
+
+# 🏁 Internship Status
+
+```text
+WEEK 1  ✅
+WEEK 2  ✅
+WEEK 3  ✅
+WEEK 4  ✅
+WEEK 5  ✅
+WEEK 6  🚧 In Progress
+```
+
+Final Week 6 deliverables:
+
+```text
+Code Documentation       ⬜
+README                    ⬜
+Evaluation Benchmarks    ⬜
+Reproducible Setup       ⬜
+Demo Video/GIF            ⬜
+Final Presentation        ⬜
+```
+
+```
+Parallax Labs AI/ML Internship
+Retrieval-Augmented Generation System
+```
+
+````
+
