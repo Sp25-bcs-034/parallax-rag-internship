@@ -1,5 +1,5 @@
 import chromadb 
-
+"""Utilities for storing and retrieving embeddings using ChromaDB."""
     
 def storing (embeded_Df):
     if embeded_Df.empty:

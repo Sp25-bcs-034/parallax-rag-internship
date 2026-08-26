@@ -1,5 +1,6 @@
 import pandas as pd
-def cleaning (df ):
+def cleaning(df: pd.DataFrame) -> pd.DataFrame:
+    """Data cleaning utilities for the AG News dataset."""
     df = df.drop_duplicates()
     df= df.dropna()
     df["text"] = df["text"].astype(str)

@@ -2,6 +2,7 @@ import pandas as pd
 import time 
 from sentence_transformers import SentenceTransformer
 model = SentenceTransformer("all-MiniLM-L6-v2")
+"""Generate document and query embeddings using a Sentence Transformer model."""
 def embedd (chunk_train_Df ):
     start_time = time.time()
     text_list_input =chunk_train_Df["text"].tolist()
@@ -24,7 +25,15 @@ def embedd (chunk_train_Df ):
     total_time = end_time- start_time
     print ( " Total time in embedding = " , total_time)
     return updated_ebedded_dataframe
-def embeded_for_query  (text):
+def embeded_for_query(text: str) -> list[float]:
+    """Generate an embedding vector for a user query.
+
+    Args:
+        text: Query text that should be converted into an embedding.
+
+    Returns:
+        A numerical embedding vector representing the query.
+    """
     query_embede_list = model.encode(text).tolist()
     return query_embede_list
        

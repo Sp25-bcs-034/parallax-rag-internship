@@ -1,7 +1,7 @@
 import pandas as pd
 from transformers import pipeline
 
-
+"""NLP analysis utilities for topic and sentiment metadata generation."""
 _sentiment_pipeline = None
 
 

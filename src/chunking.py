@@ -1,6 +1,19 @@
 import pandas as pd 
 from langchain_text_splitters import  RecursiveCharacterTextSplitter
-def chunking ( splitter , train_Df):
+"""Utilities for splitting documents into smaller text chunks."""
+def chunking(
+    splitter: RecursiveCharacterTextSplitter,
+    train_Df: pd.DataFrame
+) -> pd.DataFrame:
+    """Split dataset text into smaller chunks.
+
+    Args:
+        splitter: LangChain text splitter used to create chunks.
+        train_Df: DataFrame containing the source text and metadata.
+
+    Returns:
+        DataFrame containing the generated chunks and their metadata.
+    """
     print ("\n ---- CHUNKING  -----")
     page_content = train_Df["text"].tolist()
     metadata = train_Df[["label"]].to_dict(orient ="records")
