@@ -1190,7 +1190,7 @@ WEEK 2  ✅
 WEEK 3  ✅
 WEEK 4  ✅
 WEEK 5  ✅
-WEEK 6  🚧 In Progress
+WEEK 6  ✅
 ```
 
 Final Week 6 deliverables:
@@ -1201,7 +1201,7 @@ README                    ⬜
 Evaluation Benchmarks    ⬜
 Reproducible Setup       ⬜
 Demo Video/GIF            ⬜
-Final Presentation        ⬜
+
 ```
 
 ```
