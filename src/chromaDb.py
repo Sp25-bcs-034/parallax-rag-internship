@@ -1,7 +1,19 @@
 import chromadb 
 """Utilities for storing and retrieving embeddings using ChromaDB."""
-    
-def storing (embeded_Df):
+from typing import Optional
+import pandas as pd   
+def storing(embeded_Df: pd.DataFrame) -> Optional[chromadb.Collection]:
+    """Store embedded chunks and their metadata in a persistent ChromaDB collection.
+
+    Args:
+        embeded_Df: DataFrame containing 'text', 'embedding', 'label', and
+            optional NLP metadata columns (topic_id, topic_label, sentiment,
+            sentiment_score).
+
+    Returns:
+        The ChromaDB collection the data was stored in, or None if the
+        input DataFrame was empty.
+    """    
     if embeded_Df.empty:
         print("No embeddings available.")
         return 

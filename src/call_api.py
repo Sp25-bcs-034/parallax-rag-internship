@@ -1,11 +1,24 @@
 import os 
 import requests 
 import json
-#from dotenv import load_dotenv
-#load_dotenv()
+from dotenv import load_dotenv
+load_dotenv()
 api_key = os.environ.get("OPENROUTER_API_KEY")
 
-def calling_Api (question ,context,api_key = api_key):
+from typing import Optional
+
+def calling_Api(question: str, context: str, api_key= api_key) -> Optional[str]:
+    """Send a question and retrieved context to the LLM via OpenRouter.
+
+    Args:
+        question: The user's original question.
+        context: Retrieved document chunks joined into a single string.
+        api_key: OpenRouter API key, defaults to the value loaded from .env.
+
+    Returns:
+        The generated answer text, or None if the request failed.
+    """
+    ...
     if api_key is None:
         print("API key not found.")
         return None

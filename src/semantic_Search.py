@@ -24,6 +24,8 @@ def semnatic_Search (collection):
         print(results["metadatas"][0][i])
         print ("Retrieval latency :"  ,Retrieval_time )
     
+    
+    
 def retrival_bechmark (collection):
     if collection.count()==0:
         print("Database is empty.")
@@ -49,6 +51,10 @@ def retrival_bechmark (collection):
     Recall_at_3 = hits/ len(test_cases)
     print ( " .....Retrieval Bechmark .....")
     print ("Recall@3:" , Recall_at_3)
+    
+    
+    
+    
 def chatting(collection, text: str | None = None) -> str | None:
     """Run the RAG pipeline for a user query.
 
@@ -102,6 +108,8 @@ def chatting(collection, text: str | None = None) -> str | None:
         print ("Total latency :"  ,total_time )
     return final_Ans    
     
+    
+    
 def filtered_search(collection):
     if collection.count() == 0:
         print("Database is empty.")
@@ -128,7 +136,23 @@ def filtered_search(collection):
         print(results["documents"][0][i])
         print(results["metadatas"][0][i])    
 from fastapi import HTTPException        
-def fastapi_question_chat (collection , question ):
+
+
+
+def fastapi_question_chat(collection, question) -> dict:
+    """Run the RAG pipeline for a FastAPI request and return a JSON-safe result.
+
+    Args:
+        collection: ChromaDB collection to query for relevant chunks.
+        question: Pydantic request object with `.question` and `.n_results`.
+
+    Returns:
+        A dictionary containing the generated answer and latency metrics.
+
+    Raises:
+        HTTPException: If retrieval or generation fails, or no answer is produced.
+    """
+    ...
     
     if collection.count ()==0:
         print("Database is empty.")
@@ -163,6 +187,12 @@ def fastapi_question_chat (collection , question ):
     generation_end_time = time.time()
     print("--------------------")
     print("Final Answer:\n")
+    Retrieval_time = retrieval_end_time -  retrieval_start_time
+    generation_time = generation_end_time - generation_start_time
+    print ("Generation latency :"  ,generation_time )
+    print ("Retrieval latency :"  ,Retrieval_time )
+    total_time = generation_time + Retrieval_time
+    print ("Total latency :"  ,total_time )
     if final_ans is None :
         print("No answer generated.")
         raise HTTPException(status_code=404, detail="No answer generated.")
@@ -171,12 +201,7 @@ def fastapi_question_chat (collection , question ):
         return { "message" : final_ans}
             
         
-    Retrieval_time = retrieval_end_time -  retrieval_start_time
-    generation_time = generation_end_time - generation_start_time
-    print ("Generation latency :"  ,generation_time )
-    print ("Retrieval latency :"  ,Retrieval_time )
-    total_time = generation_time + Retrieval_time
-    print ("Total latency :"  ,total_time )
+  
         
     
 def  retrival_ (collection , k=3 ):

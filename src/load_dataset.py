@@ -74,21 +74,30 @@ def the_pipeline ():
     collection = storing(embedded_DF)
 
     
-def get_collection ():
-    return collection 
+
 def get_chunk_Df ():
     return chunk_DF
 import chromadb 
 DB_PATH = "database/chroma_db"
 COLLECTION_NAME = "ag_news_vector_collection"
 
+
+collection = None
+chunk_DF = None
+
 def existing_collection():
-    
+    global collection
     client = chromadb.PersistentClient(path=DB_PATH)
-    try :
+    try:
         collection = client.get_collection(COLLECTION_NAME)
-        print ("Collection does  exist.")
-        return collection 
-    except Exception :
-        print ("Collection does not exist.")
+        print("Collection does exist.")
+        return collection
+    except Exception:
+        print("Collection does not exist.")
         return None
+
+def get_collection():
+    global collection
+    if collection is None:
+        collection = existing_collection()
+    return collection    
