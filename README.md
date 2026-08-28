@@ -215,6 +215,11 @@ parallax-rag-internship/
 ```
 
 ---
+# 🛠️ Screenshots :
+## Fast api docs 
+
+<img width="1919" height="1042" alt="image" src="https://github.com/user-attachments/assets/53e0d389-2ad0-46b7-99fc-b184de1298c9" />
+
 
 # 🛠️ Technologies Used
 
