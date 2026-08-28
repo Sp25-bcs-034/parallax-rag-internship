@@ -82,8 +82,6 @@ DB_PATH = "database/chroma_db"
 COLLECTION_NAME = "ag_news_vector_collection"
 
 
-collection = None
-chunk_DF = None
 
 def existing_collection():
     global collection
@@ -101,3 +99,5 @@ def get_collection():
     if collection is None:
         collection = existing_collection()
     return collection    
+
+the_pipeline()

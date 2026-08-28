@@ -6,7 +6,7 @@ Week 1 - Environment Verification Script
 """
 
 import sys
-
+from importlib.metadata import version
 import pandas as pd
 import requests
 import pytest
@@ -26,7 +26,7 @@ def check_libraries():
     print("\n[Installed Libraries]")
 
     print(f"✓ pandas          : {pd.__version__}")
-    print(f"✓ requests        : {requests.__version__}")
+    print(f"✓ requests        : {version('requests')}")
     print(f"✓ pytest          : {pytest.__version__}")
     print(f"✓ chardet         : {chardet.__version__}")
     load_dotenv()

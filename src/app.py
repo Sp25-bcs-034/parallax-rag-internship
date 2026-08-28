@@ -15,5 +15,6 @@ def main() :
     print ( "  .... Semantic Search ......")
     semnatic_Search(collection)
     retrival_bechmark(collection)
-    chatting (collection)
-    
+    chatting (collection) 
+main ()
+" running the main  successfully "
